@@ -1,0 +1,151 @@
+/* Main variables */
+
+$step: 4px
+$big-radius: $step * 4
+
+/* Default text Mixins */
+
+@mixin medium-text
+  font-weight: 500
+  font-family: $Roboto-Medium, sans-serif
+
+@mixin default-mega-paragraph
+  font-size: $step * 6
+  line-height: 140%
+
+@mixin default-button-text
+  font-size: 15px
+  line-height: 150%
+
+@mixin default-mega-button-text
+  font-size: $step * 5
+  line-height: 150%
+
+@mixin default-h1
+  font-size: $step * 14
+  line-height: 120%
+  color: $text-major
+
+  @media only screen and (max-width: 575.98px)
+    font-size: $step * 7
+
+@mixin default-h2
+  font-size: $step * 13
+  line-height: 120%
+  color: $text-major
+
+  @media only screen and (max-width: 575.98px)
+    font-size: $step * 6
+
+@mixin default-h3
+  font-size: $step * 8
+  line-height: 120%
+  color: $text-major
+
+  @media only screen and (max-width: 575.98px)
+    font-size: $step * 5
+
+@mixin default-h3-reg
+  font-size: $step * 6
+  line-height: 140%
+  color: $text-major
+
+  @media only screen and (max-width: 575.98px)
+    font-size: $step * 5
+    line-height: 120%
+
+@mixin default-body-text
+  font-size: $step * 4
+  line-height: 140%
+
+@mixin default-tab-text
+  font-size: $step * 4
+  line-height: 150%
+
+@mixin default-small-text
+  font-size: 14px
+  line-height: 140%
+
+@mixin default-mobile-small-text
+  font-size: $step * 3
+  line-height: 130%
+
+@mixin big-title
+  font-size: $step * 7
+  line-height: 120%
+  color: $text-major
+
+  @media only screen and (max-width: 575.98px)
+    font-size: $step * 4
+
+@mixin big-mobile-description
+  font-size: $step * 4
+  line-height: 120%
+  color: $text-major
+
+/* Flex Mixins */
+
+@mixin align-items-center
+  display: flex
+  align-items: center
+
+@mixin space-between
+  justify-content: space-between
+  @include align-items-center
+
+@mixin direction-column
+  display: flex
+  flex-direction: column
+
+@mixin justify-content-center
+  display: flex
+  justify-content: center
+
+/* Container Mixins */
+
+@mixin scrollbar-block
+  width: max-content
+  box-sizing: border-box
+
+@mixin main-container
+  width: 100%
+  display: flex
+  justify-content: center
+  align-items: center
+
+@mixin ps-main-block
+  @include direction-column
+  padding: $step * 10 0
+  width: $step * 322
+  align-items: flex-start
+  gap: $step * 10
+  align-self: stretch
+
+@mixin main-block
+  @include direction-column
+  width: 100vw
+  display: flex
+  justify-content: center
+  align-items: center
+
+  @media only screen and (max-width: 1440.98px)
+    width: 100%
+    padding: $step * 10 $step * 19
+
+  @media only screen and (max-width: 1024.98px)
+    width: $step * 172
+    padding: $step * 10 0
+
+  @media only screen and (max-width: 575.98px)
+    padding: $step * 5 $step * 4
+
+
+/* For Animations */
+
+@keyframes close-modal
+  0%
+    transform: scale(1)
+    opacity: 1
+  100%
+    transform: scale(1.2)
+    opacity: 0

@@ -1,0 +1,34 @@
+.main-page
+  width: 100vw
+  box-sizing: border-box
+
+.popular-categories,
+.popular-products
+  @include direction-column
+  width: 100vw
+  box-sizing: border-box
+
+  .header-text
+    @include align-items-center
+    justify-content: center
+    width: 100vw
+    box-sizing: border-box
+    padding: 20px
+    @include default-mega-paragraph
+    font-weight: 700
+
+  .card-container
+    background: #1D1D1D
+    padding: 150px 0
+    width: 100vw
+    box-sizing: border-box
+    @include justify-content-center
+    align-items: center
+    gap: 120px
+    align-self: stretch
+    height: 100%
+
+    .popular-text
+      @include default-mega-button-text
+      margin-bottom: 60px
+

@@ -1,0 +1,44 @@
+.return-policy-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+
+.return-policy-block
+  @include direction-column
+  align-items: flex-start
+  width: $step * 322
+  margin-top: 100px
+  gap: 50px
+  padding: 0 100px 100px
+  box-sizing: border-box
+
+  .title
+    font-weight: 700
+    @include default-h3
+
+  .main-concepts
+    @include direction-column
+    gap: 30px
+
+    .title
+      @include default-mega-paragraph
+      font-weight: 700
+
+    .questions-block
+      @include direction-column
+      gap: 20px
+
+      .question
+        @include default-mega-button-text
+        font-weight: 700
+
+      .answer
+        @include default-button-text
+        color: #FFF
+
+        ul
+          margin: 0
+          padding-left: 20px

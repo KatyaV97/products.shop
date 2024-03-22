@@ -1,0 +1,21 @@
+.footer-container
+  @include justify-content-center
+  width: 100vw
+  box-sizing: border-box
+  padding: 30px
+
+  .footer-block
+    width: $step * 322
+    display: flex
+    justify-content: space-between
+    align-items: center
+    color: #FFF
+
+    .center
+      margin: 0
+      @include default-button-text
+
+    .between
+      margin: 0
+      @include default-mega-button-text
+      cursor: pointer

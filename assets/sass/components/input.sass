@@ -1,0 +1,47 @@
+.input-block
+  @include direction-column
+  gap: $step * 2
+  width: 100%
+
+.input-body
+  @include align-items-center
+  box-sizing: border-box
+  transition: all ease .2s
+  min-width: 490px
+  width: 100%
+  background: #FFF
+  height: 30px
+  color: $text-black
+
+  .left
+    @include align-items-center
+    padding: 5px 20px
+    width: 100%
+
+    .main-input
+      height: 20px
+      border: none
+      outline: none
+      width: 100%
+      @include default-body-text
+
+      &::placeholder,
+      &:disabled
+        color: $text-helper
+
+      &:focus
+        &::placeholder
+          color: $background-white-pressed
+
+
+@media only screen and (max-width: 575.98px)
+
+  .input-body
+    height: $step * 13
+
+    .left
+      box-sizing: border-box
+      height: $step * 13
+
+      .main-input
+        @include default-small-text

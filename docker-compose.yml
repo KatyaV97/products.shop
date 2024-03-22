@@ -1,0 +1,35 @@
+services:
+  nginx:
+    container_name: ${CI_PROJECT_PATH_SLUG}-nginx
+    restart: always
+    build:
+      context: ./docker/nginx
+      dockerfile: nginx.Dockerfile
+    image: ${CI_PROJECT_PATH_SLUG}-nginx:latest
+    environment:
+      - TZ=Asia/Novosibirsk
+    ports:
+      - "80:80"
+    volumes:
+      - '${PROJ_DIR}:/usr/share/nginx/html'
+    networks:
+      - network_ext
+
+  node:
+    container_name: ${CI_PROJECT_PATH_SLUG}-node
+    restart: always
+    build:
+      context: ./docker/node
+      dockerfile: node.Dockerfile
+    image: ${CI_PROJECT_PATH_SLUG}-node:latest
+    environment:
+      - TZ=Asia/Novosibirsk
+    volumes:
+      - '${PROJ_DIR}:/app'
+    networks:
+      - network_ext
+
+networks:
+    network_ext:
+        name: ${CI_PROJECT_PATH_SLUG}-net
+        driver: bridge

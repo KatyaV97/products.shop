@@ -1,0 +1,32 @@
+.header-container
+  @include justify-content-center
+  padding: 30px 0
+  width: 100vw
+  box-sizing: border-box
+
+  .header-block
+    display: flex
+    gap: 40px
+    width: $step * 322
+    justify-content: space-between
+
+    .left-block
+      @include justify-content-center
+      align-items: center
+      gap: 40px
+
+      .ico
+        img
+          width: 173px
+          height: 40px
+
+      .search
+        display: flex
+
+    .right-side
+      @include justify-content-center
+      align-items: center
+      gap: 40px
+
+      .ico-btn
+        cursor: pointer

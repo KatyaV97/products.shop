@@ -1,0 +1,57 @@
+.main-button-block
+  display: flex
+  flex-wrap: wrap
+  box-sizing: border-box
+  height: 100%
+  align-items: center
+
+  .main-btn
+    border: none
+    outline: none
+    @include default-button-text
+    @include align-items-center
+    height: 30px
+    min-width: $step * 20
+    padding: 6px 10px
+    justify-content: center
+    gap: $step * 2
+    cursor: pointer
+    word-break: normal
+
+    &._main
+      background: #FFD600
+      color: #1D1D1D
+      transition: 0.2s
+
+    &:hover
+      background-color: #F4A900
+      color: #FFF
+
+    &._small
+      padding: 6px 10px
+
+    &._big
+      padding: 18px 40px
+      @include default-mega-button-text
+
+    &._auto
+      width: 100%
+
+    &:disabled
+      background-color: #A3A3A3
+      color: $white-neutral-0
+      pointer-events: none
+
+
+
+@media only screen and (max-width: 575.98px)
+
+  .main-button-block
+    .main-btn
+      padding: $step * 4 $step * 6
+      @include default-small-text
+      height: $step * 13
+
+      &._blue-beautiful,
+      &._auto-mobile
+        width: 100%

@@ -1,0 +1,27 @@
+.popular-product-block
+  @include direction-column
+  width: 233px
+  align-content: center
+  align-items: center
+  gap: 10px
+  align-self: stretch
+  justify-content: space-between
+  cursor: pointer
+  transition: 1s
+
+  &:hover
+    transform: scale(1.2)
+
+  .top-block
+    @include direction-column
+    gap: 10px
+
+  .popular-product-img
+    img
+      width: 233px
+      height: 235px
+
+  .card-title
+    flex-wrap: wrap
+    color: #FFF
+    text-align: center

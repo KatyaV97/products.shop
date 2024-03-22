@@ -1,0 +1,47 @@
+.tabs-block
+  display: flex
+  align-items: flex-start
+  align-content: flex-start
+  gap: $step * 3
+  flex-wrap: wrap
+
+  .tab
+    @include align-items-center
+    min-width: $step * 20
+    padding: $step * 3 $step * 4
+    justify-content: center
+    gap: $step
+    border-radius: $big-radius
+    text-align: center
+    @include default-tab-text
+    background: $white-neutral-0
+
+    &:not(._active)
+      cursor: pointer
+
+      &:hover
+        background-color: $white-neutral-0
+        outline: 2px solid $background-white-pressed
+        outline-offset: -2px
+
+    &._default
+      &._active
+        background: $primary-base-900
+        color: $white-neutral-0
+
+    &._perfect-color
+      &._active
+        background: $pink-base
+        color: $white-neutral-0
+
+        &._active-TV
+          background: $orange
+
+@media only screen and (max-width: 575.98px)
+
+  .tabs-block
+    .tab
+      padding: $step * 2 $step * 3
+      @include default-small-text
+      min-width: $step * 16.5
+      border-radius: $step * 3
