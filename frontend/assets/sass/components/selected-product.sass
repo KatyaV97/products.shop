@@ -1,0 +1,98 @@
+.selected-product-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+  gap: 100px
+
+  .selected-product-block
+    display: flex
+    align-items: flex-start
+    width: $step * 322
+    gap: 50px
+    padding: 100px 50px 0 100px
+    box-sizing: border-box
+    height: 100%
+
+    .left-side
+      img
+        width: 400px
+        height: 460px
+
+    .right-side
+      @include direction-column
+      justify-content: space-between
+      height: 460px
+      box-sizing: border-box
+
+      .top,
+      .bottom
+        @include direction-column
+        gap: 30px
+
+      .title
+        color: #FFF
+        @include default-mega-button-text
+
+      .description
+        @include direction-column
+        gap: 15px
+
+        .title
+          @include default-mega-button-text
+          color: #FFD600
+
+        .description
+          @include default-button-text
+          color: #FFF
+
+      .buy-block
+        display: flex
+        gap: 30px
+
+        .heart
+          cursor: pointer
+
+        svg
+          width: 50px
+          height: 40px
+
+        .toggle-block
+          @include justify-content-center
+          gap: 0
+
+        .toggle
+          cursor: pointer
+          width: 32px
+          height: 38px
+          background-color: #000
+          @include justify-content-center
+          align-items: center
+          border: #332B00 2px solid
+
+        .main-input
+          width: 32px
+          background-color: #000
+          border: none
+          outline: none
+          color: #FFD600
+          border-top: #332B00 2px solid
+          border-bottom: #332B00 2px solid
+          text-align: center
+
+          & input[type=number]
+            padding: 0
+            height: 38px
+            -moz-appearance: textfield
+
+  .line
+    width: 100%
+    height: 1px
+    background-color: #FFD600
+
+  .popular-products
+    .card-container
+      padding: 0
+      margin-bottom: 150px

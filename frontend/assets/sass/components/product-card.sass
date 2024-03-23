@@ -1,0 +1,25 @@
+.product-card-container
+  @include direction-column
+  align-items: center
+  justify-content: space-between
+  width: 320px
+  cursor: pointer
+  gap: 10px
+  color: #FFF
+
+  &:hover
+    box-shadow: 5px 10px 15px rgba(211, 211, 211, 0.2), 0 4px 6px rgb(19, 19, 19)
+
+  .top
+    @include direction-column
+    gap: 10px
+    align-items: center
+
+  .title,
+  .price
+    @include default-mega-button-text
+    text-align: center
+
+  img
+    width: 320px
+    height: 368px

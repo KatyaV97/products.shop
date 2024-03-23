@@ -17,10 +17,82 @@
     .left-side
       @include direction-column
       gap: 20px
+      width: 30%
 
       .sort-price
+        @include direction-column
+        gap: 20px
 
         .title
           @include default-mega-paragraph
           font-weight: 600
+
+        .filter-interval
+          display: flex
+          gap: 10px
+          color: #FFF
+
+        .filter-btn
+          cursor: pointer
+
+          &:hover
+            text-decoration: underline 2px
+
+      .line
+        width: 100%
+        height: 1px
+        background-color: #FFD600
+        margin: 20px 0
+
+      .categories-title
+        @include direction-column
+        gap: 20px
+
+        .title
+          @include default-mega-paragraph
+          font-weight: 600
+
+        .categories
+          @include direction-column
+          gap: 15px
+          color: #FFF
+
+          .category
+            width: 100%
+            cursor: pointer
+
+            &:hover
+              color: #F4A900
+
+            &._active
+              color: #f1a500
+
+  .right-side
+    width: 70%
+    @include direction-column
+    gap: 60px
+
+    .sort-block
+      width: 250px
+      padding: 10px
+      color: #FFF
+      border-bottom: #FFD600 2px solid
+      cursor: pointer
+      position: relative
+
+    .products-list-block
+      display: flex
+      gap: 60px
+      flex-wrap: wrap
+      height: 100%
+      align-self: stretch
+
+  .more-block
+    @include justify-content-center
+    align-items: center
+    width: 100%
+    color: #FFF
+    gap: 10px
+    cursor: pointer
+
 

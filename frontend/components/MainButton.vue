@@ -8,6 +8,7 @@
           '_big' : classes.includes('big'),
           '_small' : classes.includes('small'),
            '_auto' : classes.includes('auto'),
+           '_for-auth' : classes.includes('for-auth'),
         }"
     >
       <slot/>

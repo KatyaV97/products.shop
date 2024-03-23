@@ -1,0 +1,104 @@
+.slider-container
+  box-sizing: border-box
+  outline: none
+  width: 100%
+
+  .vue-slider-dot-tooltip-text,
+  .vue-slider-dot-tooltip-inner,
+  .vue-slider-dot-tooltip-inner-top
+    display: none
+
+  .vue-slider
+    &.vue-slider-ltr
+
+      .vue-slider-rail
+        background: #e7d67d
+
+        .vue-slider-process
+          background: #FFD600
+
+        .vue-slider-dot-handle
+          border: #FFD600
+          height: 15px
+          width: 8px
+          border-radius: 0
+          background: #FFD600
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.2)
+
+
+  &:after
+    content: ''
+    display: table
+    clear: both
+
+  .ui-slider
+    position: relative
+    background: #FFD600
+    height: 10px
+    border-radius: 10px
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), 1px 1px 5px rgba(255, 255, 255, 1)
+
+    .ui-slider-handle
+      position: absolute
+      margin-left: -16px
+      width: 32px
+      height: 32px
+      cursor: pointer
+      border-radius: 50%
+      border: 4px solid #FFD600
+      top: -11px
+      background: #FFF
+      z-index: 2
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.2)
+      transition: transform 0.2s, border 0.4s
+
+      &:hover,
+      &:focus
+        border: 4px solid #FFD600
+        transform: scale(1.1)
+
+  .slider-input-left,
+  .slider-input-right
+    display: flex
+    align-items: flex-end
+    height: 32px
+    text-align: center
+    font-size: 18px
+    padding: 0
+    width: 150px
+    margin-top: 30px
+    color: #FFF
+
+    .price
+      margin-right: 20px
+
+  .slider-input-left
+    float: left
+
+  .slider-input-right
+    float: right
+
+  .main-input-left,
+  .main-input-right
+    width: 50px
+    background-color: #1D1D1D
+    border: none
+    outline: none
+    color: #FFF
+
+    & input[type=number]
+      padding: 0
+      height: 32px
+      -moz-appearance: textfield
+
+  .ui-slider-range
+    position: absolute
+    z-index: 1
+    height: 10px
+    border: 0
+    background: #337AB7
+    border-radius: 10px
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3), 1px 1px 5px rgba(255, 255, 255, 1)
+
+
+

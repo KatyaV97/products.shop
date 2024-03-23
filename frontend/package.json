@@ -23,6 +23,7 @@
     "maska": "^2.1.10",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",
+    "vue-slider-component": "^4.1.0-beta.7",
     "vue3-perfect-scrollbar": "^1.6.1",
     "yandex-metrika-module-nuxt3": "^1.5.3"
   }

@@ -1,28 +1,28 @@
 <template>
-    <div
-        class="input-body"
-        v-on:mouseover="hover = true"
-        v-on:mouseleave="hover = false"
-        :class="
+  <div
+      class="input-body"
+      v-on:mouseover="hover = true"
+      v-on:mouseleave="hover = false"
+      :class="
         {
           '_focus' : focus,
           '_invalid' : invalid
         }"
-    >
-      <div class="left">
-        <input
-            class="main-input"
-            ref="input"
-            @focus="setFocus"
-            @blur="removeFocus"
-            :placeholder="placeholder"
-            type="text"
-            :id="'input' + id"
-            :value="value"
-            v-on:keydown.enter="focus = false"
-            @input="setValue($event.target.value)"
-        >
-      </div>
+  >
+    <div class="left">
+      <input
+          class="main-input"
+          ref="input"
+          @focus="setFocus"
+          @blur="removeFocus"
+          :placeholder="placeholder"
+          type="text"
+          :id="'input' + id"
+          :value="value"
+          v-on:keydown.enter="focus = false"
+          @input="setValue($event.target.value)"
+      >
+    </div>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ export default {
       type: Number,
       default: 0
     },
-    placeholder:{
+    placeholder: {
       type: String,
       default: ''
     }
