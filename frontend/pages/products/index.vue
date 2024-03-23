@@ -11,7 +11,15 @@
       <Header/>
     </template>
     <template v-slot:main-content>
-
+      <div class="catalog-container">
+        <div class="catalog-block">
+          <div class="left-side">
+            <div class="sort-price">
+              <p class="_non-space title">Цена</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </template>
     <template v-slot:footer>
       <Footer/>

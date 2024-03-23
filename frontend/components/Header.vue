@@ -17,11 +17,12 @@
           </MainButton>
         </div>
       </div>
-      <MainButton
-          :classes="['main', 'big']"
+      <NuxtLink
+          to="/"
+          class="custom-link button-link"
       >
         <p class="_non-space">Магазин</p>
-      </MainButton>
+      </NuxtLink>
       <div class="right-side">
         <div class="ico-btn">
           <svg width="33" height="33"

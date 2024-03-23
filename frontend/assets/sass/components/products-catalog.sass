@@ -1,0 +1,26 @@
+.catalog-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+
+  .catalog-block
+    display: flex
+    align-items: flex-start
+    width: $step * 322
+    gap: 50px
+    padding: 100px 50px
+    box-sizing: border-box
+
+    .left-side
+      @include direction-column
+      gap: 20px
+
+      .sort-price
+
+        .title
+          @include default-mega-paragraph
+          font-weight: 600
+

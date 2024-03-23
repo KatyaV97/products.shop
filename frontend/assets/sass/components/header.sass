@@ -1,3 +1,16 @@
+.button-link
+  @include justify-content-center
+  align-items: center
+  height:  35px
+  width: 135px
+  background-color: #FFD600
+  color: #000
+  transition: 0.2s
+
+  &:hover
+    background-color: #F4A900
+    color: #FFF
+
 .header-container
   @include justify-content-center
   padding: 30px 0
@@ -5,7 +18,7 @@
   box-sizing: border-box
 
   .header-block
-    display: flex
+    @include align-items-center
     gap: 40px
     width: $step * 322
     justify-content: space-between
