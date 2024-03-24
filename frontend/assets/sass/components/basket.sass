@@ -1,0 +1,149 @@
+.basket-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+
+.basket-block
+  @include direction-column
+  align-items: flex-start
+  width: $step * 322
+  margin-top: 100px
+  box-sizing: border-box
+
+  .title
+    font-weight: 700
+    @include default-mega-paragraph
+
+  .table-header
+    @include space-between
+    gap: 40px
+    width: 100%
+    padding: 0 0 10px
+    margin-top: 40px
+    border-bottom: 1px solid #FFD600
+
+    .header-item
+      @include default-mega-button-text
+      font-weight: 600
+      width: 100%
+
+    .empty
+      width: 10%
+
+    .name
+      width: 40%
+
+    .count,
+    .price
+      width: 25%
+
+  .basket-products
+    width: 100%
+    @include direction-column
+    justify-content: space-between
+    gap: 10px
+    padding: 10px 0
+
+  .line
+    width: 100%
+    background-color: #FFD600
+    height: 1px
+
+  .request-block
+    @include align-items-center
+    justify-content: space-between
+    margin: 50px 0 200px 0
+    border: #FFD600 1px solid
+    width: 100%
+    height: 300px
+    padding: 25px
+    box-sizing: border-box
+    gap: 40px
+
+  .inputs-block
+    @include direction-column
+    gap: 30px
+    width: 30%
+
+    .top-input
+      @include direction-column
+      align-items: center
+      width: 100%
+      gap: 10px
+
+    .error
+      color: #FF5151
+
+    .main-input
+      border: none
+      outline: none
+      padding: 10px 15px
+      box-sizing: border-box
+      background-color: #FFFFFF
+      width: 100%
+      height: 38px
+      @include default-button-text
+      color: #1D1D1D
+
+      &::placeholder
+        color: #B3B3B3
+
+  .info-block
+    width: 33%
+    text-align: center
+    color: #FFF
+
+  .result-block
+    width: 25%
+    border: #FFD600 1px solid
+    height: 100%
+    padding: 40px 30px
+    box-sizing: border-box
+    @include direction-column
+    justify-content: space-between
+
+    .result
+      @include align-items-center
+      justify-content: space-between
+      @include default-mega-paragraph
+      font-weight: 700
+
+
+      .result-text
+        color: #FFFFFF
+
+      .text-center
+        width: 50%
+        text-align: center
+
+      .delivery
+        width: 50%
+        text-align: center
+        font-weight: 400
+        @include default-mega-button-text
+        color: #FFFFFF
+
+  .empty-block
+    @include direction-column
+    align-items: center
+    justify-content: center
+    padding:  150px 50px 100px
+    gap: 40px
+    width: 100%
+    box-sizing: border-box
+    border-bottom: #FFD600 1px solid
+    border-top: #FFD600 1px solid
+    margin: 60px 0 200px 0
+
+    .empty
+      color: #8E7A0E
+      font-weight: 700
+      @include default-mega-button-text
+
+    .button-link
+      width: 230px
+      height: 48px
+      @include default-mega-button-text

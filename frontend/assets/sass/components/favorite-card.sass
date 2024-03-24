@@ -1,0 +1,28 @@
+.favorite-card-container
+  @include align-items-center
+  justify-content: flex-start
+  gap: 40px
+  padding: 20px 10px
+  height: 180px
+
+  .ico
+    width: 10%
+    cursor: pointer
+
+  img
+    width: 125px
+    height: 140px
+
+  .title
+    width: 40%
+    color: #FFF
+    font-weight: 400
+    @include default-mega-button-text
+
+  .basket-btn
+    width: 20%
+
+  .price
+    width: 25%
+    color: #FFF
+    @include default-mega-button-text

@@ -1,0 +1,58 @@
+.favorites-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+
+.favorites-block
+  @include direction-column
+  align-items: flex-start
+  width: $step * 322
+  margin-top: 100px
+  box-sizing: border-box
+  margin-bottom: 200px
+
+  .line
+    width: 100%
+    background-color: #FFD600
+    height: 1px
+
+  .title
+    font-weight: 700
+    @include default-mega-paragraph
+
+  .table-header
+    @include space-between
+    gap: 40px
+    width: 100%
+    padding: 0 0 10px
+    margin-top: 40px
+    border-bottom: 1px solid #FFD600
+
+    .header-item
+      @include default-mega-button-text
+      font-weight: 600
+      width: 100%
+
+    .empty
+      width: 10%
+
+    .name
+      width: 40%
+
+    .price
+      width: 25%
+
+    .empty-2
+      width: 20%
+
+  .favorites-products
+    width: 100%
+    @include direction-column
+    justify-content: space-between
+    gap: 10px
+    padding: 10px 0
+
+
