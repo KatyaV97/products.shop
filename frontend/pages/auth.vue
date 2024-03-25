@@ -29,7 +29,7 @@
           >
             <div class="top-input">
               <label
-                  v-if="userInput.isValid"
+                  v-if="!userInput.isValid"
                   for="main-input"
                   class="error">
                 Неверный логин или пароль
@@ -38,18 +38,25 @@
                   class="main-input"
                   :placeholder="'Email'"
                   :value="userInput.email"
+                  @focus="clearError"
+                  @input="setValue('email', $event.target.value)"
               />
             </div>
             <input
                 class="main-input"
                 :placeholder="'Password'"
+                type="password"
                 :value="userInput.password"
+                @focus="clearError"
+                @input="setValue('password', $event.target.value)"
             />
             <p class="_non-space register"
-               @click="needRegistration = true"
+               @click="toRegistration"
             >Зарегистрироваться, если нет аккаунта</p>
             <MainButton
                 :classes="['main', 'for-auth']"
+                :disabled="disabledSubmitButton"
+                @click="logIn"
             >
               Войти
             </MainButton>
@@ -60,7 +67,7 @@
           >
             <div class="top-input">
               <label
-                  v-if="userInput.isValid"
+                  v-if="!userInput.isValid"
                   for="main-input"
                   class="error">
                 Некорректный адрес электронной почты
@@ -69,20 +76,29 @@
                   class="main-input"
                   :placeholder="'Имя пользователя'"
                   :value="userInput.name"
+                  @focus="clearError"
+                  @input="setValue('name', $event.target.value)"
               />
             </div>
             <input
                 class="main-input"
                 :placeholder="'Email'"
                 :value="userInput.email"
+                @focus="clearError"
+                @input="setValue('email', $event.target.value)"
             />
             <input
                 class="main-input"
                 :placeholder="'Password'"
+                type="password"
                 :value="userInput.password"
+                @focus="clearError"
+                @input="setValue('password', $event.target.value)"
             />
             <MainButton
                 :classes="['main', 'for-auth']"
+                :disabled="disabledSubmitButton"
+                @click="registration"
             >
               Зарегистрироваться
             </MainButton>
@@ -96,18 +112,113 @@
   </MainContainer>
 </template>
 
-<script lang="ts">
+<script lang="js">
+import {useAuthUserStore} from "~/store/authUserStore";
+
 export default {
   data() {
     return {
-      pageTitle: 'Night store. Авторизация' as string,
+      pageTitle: 'Night store. Авторизация',
       userInput: {
         name: '',
         password: '',
         email: '',
         isValid: true
       },
-      needRegistration: false
+      needRegistration: false,
+      data: {},
+      disabledSubmitButton: true,
+      step: 1
+    }
+  },
+  setup() {
+    const authUserStore = useAuthUserStore()
+    return {authUserStore}
+  },
+  methods: {
+    toRegistration() {
+      this.step = 2
+      this.needRegistration = true
+      this.userInput.name = ''
+      this.userInput.password = ''
+      this.userInput.email = ''
+      this.disabledSubmitButton = true
+    },
+    clearError() {
+      this.userInput.isValid = true
+    },
+    setValue(key, value) {
+      this.verifyInputs()
+      this.userInput[key] = value
+    },
+    isValidEmail(newMail) {
+      const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+      return reg.test(newMail);
+    },
+    verifyInputs() {
+      if (this.step === 1) {
+        const isValid = this.userInput.email.replaceAll(' ', '') !== '' &&
+            this.userInput.password.replaceAll(' ', '') !== '' &&
+            this.isValidEmail(this.userInput.email)
+
+        this.disabledSubmitButton = !isValid
+      } else if (this.step === 2) {
+        const isValid = this.userInput.email.replaceAll(' ', '') !== '' &&
+            this.userInput.password.replaceAll(' ', '') !== '' &&
+            this.isValidEmail(this.userInput.email) &&
+            this.userInput.name.replaceAll(' ', '') !== ''
+        console.log(isValid)
+        this.disabledSubmitButton = !isValid
+      }
+    },
+    async logIn() {
+      if (this.disabledSubmitButton) return
+
+      this.disabledSubmitButton = true
+      console.log(this.userInput)
+      const response = await useFetch('/api/auth/loginWithPassword', {
+        query: {
+          email: this.userInput.email,
+          password: this.userInput.password
+        }
+      })
+      console.log(response.data)
+      this.data = response.data.value
+      if (this.data.error) {
+        this.userInput.isValid = false
+      } else {
+        this.authUserStore.setUserName(this.data.name)
+        this.authUserStore.setAccessToken(this.data.accessToken)
+        this.authUserStore.setRefreshToken(this.data.refreshToken)
+        await navigateTo('/', {
+          external: true
+        })
+      }
+    },
+    async registration() {
+      this.disabledSubmitButton = true
+      console.log(this.userInput)
+      const response = await useFetch('/api/auth/createAccount', {
+        query: {
+          name: this.userInput.name,
+          email: this.userInput.email,
+          password: this.userInput.password
+        }
+      })
+      console.log(response.data)
+      this.data = response.data.value
+      if (this.data.error) {
+        this.userInput.isValid = false
+      } else {
+        this.authUserStore.setUserName(this.userInput.name)
+        this.authUserStore.setAccessToken(this.data.accessToken)
+        this.authUserStore.setRefreshToken(this.data.refreshToken)
+        await navigateTo('/settings', {
+          external: true
+        })
+
+      }
+
     }
   }
 }

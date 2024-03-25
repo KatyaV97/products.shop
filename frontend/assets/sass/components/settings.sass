@@ -1,0 +1,58 @@
+.settings-container
+  background-color: #1D1D1D
+  width: 100vw
+  box-sizing: border-box
+  @include direction-column
+  justify-content: center
+  align-items: center
+  min-height: 80vh
+
+  .settings-block
+    display: flex
+    align-items: flex-start
+    width: $step * 322
+    gap: 50px
+    box-sizing: border-box
+    padding-bottom: 200px
+
+    .left-side
+      @include direction-column
+      gap: 50px
+      width: 30%
+      border-right: 1px solid #FFD600
+      padding: 100px 50px
+      box-sizing: border-box
+
+      .avatar-block
+        @include align-items-center
+        gap: 40px
+
+        .avatar
+          width: 100px
+          height: 100px
+
+        .avatar-title
+          @include default-mega-paragraph
+          color: #FFFFFF
+
+      .favorites,
+      .basket
+        .custom-link
+          @include default-mega-button-text
+          color: #FFD600
+
+      .button-link
+        width: 230px
+        height: 48px
+        @include default-mega-button-text
+
+  .right-side
+    @include direction-column
+    gap: 30px
+    width: 70%
+    padding: 100px 50px
+    box-sizing: border-box
+    color: #FFF
+
+    .main-text
+      @include default-mega-button-text
