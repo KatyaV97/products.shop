@@ -1,19 +1,19 @@
-import {BASKET} from "~/server/api/constants/urls"
+import {FAVORITES} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
 import useCustomFetch from "~/server/api/helpers/customFetcher";
 
 /**
- * Method: DELETE
- * Добавление в каорзину товара
+ * Method: POST
+ * Добавление в избранное товара
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await useCustomFetch(`${BASKET}/deleteProduct`,
+        return await useCustomFetch(`${FAVORITES}/addFavorite`,
             event,
             {
-                method: 'DELETE',
+                method: 'POST',
                 body: {
                     product_id: params.product_id,
                     user_id: params.user_id,

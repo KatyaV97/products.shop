@@ -1,17 +1,15 @@
-import {FAVORITES} from "~/server/api/constants/urls"
+import {CATALOG} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
-import useCustomFetch from "~/server/api/helpers/customFetcher";
 
 /**
  * Method: GET
- * Получение товаров из корзины
+ * Получение популярных категорий товаров
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await useCustomFetch(`${FAVORITES}/getFavorites/${params.user_id}`,
-            event,
+        return await $fetch(`${CATALOG}/getCategories`,
             {
                 method: 'GET',
             }

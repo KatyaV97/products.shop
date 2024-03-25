@@ -3,21 +3,17 @@ import {H3Event} from "h3"
 import useCustomFetch from "~/server/api/helpers/customFetcher";
 
 /**
- * Method: DELETE
- * Добавление в каорзину товара
+ * Method: GET
+ * Получение товаров из корзины
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await useCustomFetch(`${BASKET}/deleteProduct`,
+        return await useCustomFetch(`${BASKET}/getProducts/${params.user_id}`,
             event,
             {
-                method: 'DELETE',
-                body: {
-                    product_id: params.product_id,
-                    user_id: params.user_id,
-                }
+                method: 'GET',
             }
         )
     } catch (exception) {

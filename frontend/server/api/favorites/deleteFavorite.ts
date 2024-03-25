@@ -1,6 +1,6 @@
-import {BASKET} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
 import useCustomFetch from "~/server/api/helpers/customFetcher";
+import {FAVORITES} from "~/server/api/constants/urls"
 
 /**
  * Method: DELETE
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await useCustomFetch(`${BASKET}/deleteProduct`,
+        return await useCustomFetch(`${FAVORITES}/deleteFavorite`,
             event,
             {
                 method: 'DELETE',
