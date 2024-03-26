@@ -1,6 +1,6 @@
 <template>
   <div class="basket-card-container">
-    <img class="ico" src="/Aroma.png" alt="Картинка товара"/>
+    <img class="ico" :src="cardInfo.imgUrl" alt="Картинка товара"/>
     <p class="_non-space title">{{cardInfo.title}}</p>
     <div class="toggle-block">
       <div

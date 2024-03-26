@@ -1,6 +1,6 @@
 <template>
   <div class="favorite-card-container">
-    <img class="ico" src="/Aroma.png" alt="Картинка товара"/>
+    <img class="ico" :src="cardInfo.imgUrl" alt="Картинка товара"/>
     <p class="_non-space title">{{ cardInfo.title }}</p>
     <p class="_non-space price">
       {{ new Intl.NumberFormat('ru-RU').format(cardInfo.price) }} руб.

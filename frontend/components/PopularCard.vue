@@ -1,11 +1,12 @@
 <template>
   <div class="popular-card-block">
     <div class="popular-card-img">
-      <img src="/Aroma.png" alt="Картинка товара">
+      <img :src="cardInfo.urlImg" alt="Картинка товара">
     </div>
     <div class="card-btn">
       <MainButton
-            :classes="['main', 'auto']"
+          :classes="['main', 'auto']"
+          @click="$emit('moveToCatalog', cardInfo)"
       >
         <p class="_non-space card-info-btn">{{ cardInfo.title }}</p>
       </MainButton>
@@ -15,6 +16,7 @@
 
 <script lang="ts">
 export default {
+  emits: ['moveToCatalog'],
   props: {
     cardInfo: {
       type: Object,

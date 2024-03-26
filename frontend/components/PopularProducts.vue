@@ -2,14 +2,14 @@
   <div class="popular-product-block">
     <div class="top-block">
       <div class="popular-product-img">
-        <img src="/sticker.png" alt="Картинка товара">
+        <img :src="cardInfo.urlImg" alt="Картинка товара">
       </div>
       <div class="card-title">
         {{ cardInfo.title }}
       </div>
     </div>
     <div class="card-price">
-      {{ cardInfo.price }}
+      {{ cardInfo.price }} <span class="rouble">№</span>
     </div>
   </div>
 </template>

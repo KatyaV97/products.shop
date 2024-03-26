@@ -16,13 +16,17 @@
           <div class="header-text"><p class="_non-space">
             Популярные категории
           </p></div>
-          <div class=card-container>
+          <div
+              class=card-container
+              v-if="popularCategories && popularCategories.length > 0"
+          >
             <template
-                v-for="card in popularCards"
+                v-for="card in popularCategories"
                 :key="card.title"
             >
               <PopularCard
                   :card-info="card"
+                  @move-to-catalog="moveToCatalog"
               />
             </template>
           </div>
@@ -31,7 +35,10 @@
           <div class="header-text"><p class="_non-space">
             Популярные товары
           </p></div>
-          <div class=card-container>
+          <div
+              class=card-container
+              v-if="popularProducts && popularProducts.length > 0"
+          >
             <p class="_non-space popular-text">Популярное</p>
             <template
                 v-for="card in popularProducts"
@@ -39,6 +46,7 @@
             >
               <PopularProducts
                   :card-info="card"
+                  @click="moveToCatalog(card)"
               />
             </template>
           </div>
@@ -53,43 +61,34 @@
 
 <script lang="ts">
 import PopularProducts from "~/components/PopularProducts.vue";
+import {useProductsStore} from "~/store/productsStore"
 
 export default {
   components: {PopularProducts},
   data() {
     return {
       pageTitle: 'Night store. Главная' as string,
-      popularCards: [
-        {
-          title: 'Ароматизаторы',
-          urlImg: "src/public/Aroma.png"
-        },
-        {
-          title: 'Банки',
-          urlImg: "src/public/Aroma.png"
-        },
-        {
-          title: 'Петли',
-          urlImg: "src/public/Aroma.png"
-        }
-      ],
-      popularProducts: [
-        {
-          title: 'Наклейка на авто, JDM slap sticker, Kanjo loop one',
-          price: '350.00',
-          urlImg: "src/public/Aroma.png"
-        },
-        {
-          title: 'Петля буксировочная OMP style чёрная',
-          price: '450.00',
-          urlImg: "src/public/Aroma.png"
-        },
-        {
-          title: 'Рамка для номера “JDM”',
-          price: '240.00',
-          urlImg: "src/public/Aroma.png"
-        }
-      ]
+    }
+  },
+  async setup() {
+    const productsStore = useProductsStore()
+
+    const [{data: responseCategories}, {data: responseProducts}] = await Promise.all(
+        [useFetch('/api/popular/getPopularCategories'),
+          useFetch('/api/popular/getPopularProducts')])
+    const popularCategories = responseCategories.value
+    const popularProducts = responseProducts.value
+
+    return {
+      popularCategories,
+      popularProducts,
+      productsStore
+    }
+  },
+  methods: {
+    moveToCatalog(card) {
+      this.productsStore.setActiveCategory(card.category_id)
+      this.$router.push('/products')
     }
   }
 }

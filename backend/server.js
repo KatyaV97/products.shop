@@ -173,7 +173,122 @@ app.post('/api/auth/refresh-token', async (req, res) => {
     });
 });
 
+/**
+ * Method: Get
+ * Handle get popular categories
+ */
+app.get('/api/popular/categories', async (req, res) => {
+    console.log(111)
+    try {
+        const response = await fetchPopularCategories();
+        console.log(response)
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
 
+/**
+ * Method: Get
+ * Handle get popular products
+ */
+app.get('/api/popular/products', async (req, res) => {
+    try {
+        const response = await fetchPopularProducts();
+
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchPopularCategories() {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM popular_categories', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+async function fetchPopularProducts(){
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM popular_products', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.get('/api/catalog/getCategories', async (req, res) => {
+    try {
+        const response = await fetchCategories();
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchCategories(){
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM categories', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.get('/api/catalog/getProducts', async (req, res) => {
+    const categoryId = req.query.category_id;
+    console.log(categoryId)
+    try {
+        const response = await fetchProductsByCategory(categoryId);
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchProductsByCategory(categoryId){
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM products WHERE category_id = ?', [categoryId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
 
 const start = () => {
     try {

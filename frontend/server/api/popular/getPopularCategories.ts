@@ -7,7 +7,6 @@ import {H3Event} from "h3"
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
-
     try {
         return await $fetch(`${POPULAR}/categories`,
             {

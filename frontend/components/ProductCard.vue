@@ -5,7 +5,7 @@
   >
     <div class="product-card-container">
       <div class="top">
-        <img src="/Aroma.png" alt="Картинка товара"/>
+        <img :src="cardInfo.urlImg" alt="Картинка товара"/>
         <p class="_non-space title">{{ cardInfo.title }}</p>
       </div>
       <p class="_non-space price">{{ cardInfo.price }}</p>

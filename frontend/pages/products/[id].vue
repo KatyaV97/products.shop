@@ -14,7 +14,7 @@
       <div class="selected-product-container">
         <div class="selected-product-block">
           <div class="left-side">
-            <img src="/Aroma.png" alt="Картинка товара"/>
+            <img :src="cardInfo.imgUrl" alt="Картинка товара"/>
           </div>
           <div class="right-side">
             <div class="top">
