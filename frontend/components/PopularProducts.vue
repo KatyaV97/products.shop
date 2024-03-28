@@ -1,5 +1,8 @@
 <template>
-  <div class="popular-product-block">
+  <div
+      @click="moveToProduct"
+      class="popular-product-block"
+  >
     <div class="top-block">
       <div class="popular-product-img">
         <img :src="cardInfo.urlImg" alt="Картинка товара">
@@ -20,6 +23,11 @@ export default {
     cardInfo: {
       type: Object,
       required: true
+    }
+  },
+  methods:{
+    moveToProduct(){
+      this.$router.push(`/products/${this.cardInfo.product_id}`)
     }
   }
 }

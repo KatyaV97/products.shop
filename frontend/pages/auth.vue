@@ -211,6 +211,7 @@ export default {
         this.userInput.isValid = false
       } else {
         this.authUserStore.setUserName(this.userInput.name)
+        this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
         await navigateTo('/settings', {

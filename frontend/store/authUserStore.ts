@@ -31,6 +31,14 @@ export const useAuthUserStore = defineStore('authUserStore', {
             }
             return result
         },
+        getUserId() {
+            const userName = useCookie('userId')
+            let result = this.userName
+            if (!this.userName && typeof userName.value === 'string') {
+                result = userName.value
+            }
+            return result
+        },
     },
     actions: {
         setRefreshToken(value: null | string): void {
@@ -49,16 +57,25 @@ export const useAuthUserStore = defineStore('authUserStore', {
             this.userName = value
             access.value = value
         },
-        logOut(): void {
+        setUserId(value) {
+            console.log(this.userId)
+            const access = useCookie('userId')
+            this.userId = value
+            access.value = value
+        },
+        logOut() {
             const refresh = useCookie('refresh')
             const access = useCookie('access')
             const userName = useCookie('userName')
+            const userId = useCookie('userId')
             this.refreshToken = null
             this.accessToken = null
             this.userName = null
+            this.userId = null
             refresh.value = null
             access.value = null
             userName.value = null
+            userId.value = null
         }
     }
 })

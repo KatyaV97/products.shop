@@ -46,7 +46,6 @@
             >
               <PopularProducts
                   :card-info="card"
-                  @click="moveToCatalog(card)"
               />
             </template>
           </div>

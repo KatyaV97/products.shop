@@ -5,7 +5,7 @@ import {H3Event} from "h3"
  * Method: POST
  * Получение ключа аутентификации по паролю
  */
-export default defineEventHandler(async (event: H3Event<Request>) => {
+export default defineEventHandler(async (event) => {
     const params = getQuery(event)
 /*
     let myHeaders = new Headers();

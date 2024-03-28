@@ -3,13 +3,13 @@ import {H3Event} from "h3"
 
 /**
  * Method: GET
- * Получение популярных категорий товаров
+ * Получение продукта по id
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await $fetch(`${CATALOG}/getProduct/${params.id}`,
+        return await $fetch(`${CATALOG}/getProduct/?product_id=${params.product_id}`,
             {
                 method: 'GET',
             }

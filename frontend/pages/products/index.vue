@@ -19,9 +19,13 @@
               <Slider
                   :min="0"
                   :max="12000"
+                  @update-min-max="setMinMax"
               />
               <div class="filter-interval">
-                <p class="_non-space filter-btn">Фильтровать</p>
+                <p
+                    @click="filterProductsByPrice"
+                    class="_non-space filter-btn"
+                >Фильтровать</p>
               </div>
             </div>
             <div class="line"></div>
@@ -34,7 +38,6 @@
                     v-for="c in categories"
                     :key="c"
                 >
-
                   <p class="_non-space category"
                      :class="{
                     '_active': c.isActive
@@ -57,9 +60,11 @@
                   @changeSort="changeSortTab"
               />
             </div>
-            <div class="products-list-block">
+            <div class="products-list-block"
+                 v-if="!isLoading && filteredProducts && filteredProducts.length > 0"
+            >
               <template
-                  v-for="product in products"
+                  v-for="product in filteredProducts"
                   :key="product.title"
               >
                 <ProductCard
@@ -67,7 +72,9 @@
                 />
               </template>
             </div>
-            <div class="more-block">
+            <div class="more-block"
+                 v-if="filteredProducts && filteredProducts.length > 10"
+            >
               <p class="_non-space">Ещё</p>
               <svg width="32"
                    height="32"
@@ -97,6 +104,11 @@ export default {
   data() {
     return {
       pageTitle: 'Night store' as string,
+      isLoading: true,
+      priceRange: {
+        min: 0,
+        max: 12000
+      },
       tooltip: {
         show: false
       },
@@ -108,8 +120,7 @@ export default {
         {
           type: 2,
           title: 'Цены: по убыванию'
-        }
-        , {
+        }, {
           type: 3,
           title: 'По полуярности'
         }
@@ -118,26 +129,7 @@ export default {
         type: 1,
         title: 'Цены: по возрастанию'
       },
-      /*products: [
-        /!*  {
-            id: 1,
-            title: 'Наклейка на авто, JDM slap sticker, Kanjo loop one',
-            price: '350.00',
-            urlImg: "src/public/Aroma.png"
-          },
-          {
-            id: 2,
-            title: 'Петля буксировочная OMP style чёрная',
-            price: '450.00',
-            urlImg: "src/public/Aroma.png"
-          },
-          {
-            id: 3,
-            title: 'Рамка для номера “JDM”',
-            price: '240.00',
-            urlImg: "src/public/Aroma.png"
-          }*!/
-      ]*/
+      filteredProducts: [],
     }
   },
   async setup() {
@@ -150,7 +142,7 @@ export default {
                   category_id: productsStore.selectedCategory,
                 }
               })])
-    console.log(responseProducts)
+
     const categories = responseCategories.value
     const products = responseProducts.value
     return {
@@ -171,32 +163,63 @@ export default {
         category.isActive = category.id === this.selectedCategory
       })
     }
-
-    //this.initProducts()
+    this.filterProductsByLength(10)
+    this.sortProducts()
+    this.isLoading = false
   },
   methods: {
+    setMinMax(range) {
+      this.priceRange.min = range.leftValue
+      this.priceRange.max = range.rightValue
+    },
+    filterProductsByPrice() {
+      this.filteredProducts = this.products.filter(product => {
+        return product.price >= this.priceRange.min && product.price <= this.priceRange.max
+      })
+      this.sortProducts()
+    },
+    filterProductsByLength(count) {
+      if (this.products && this.products.length > count) {
+        this.filteredProducts = this.products.slice(0, count)
+      } else {
+        this.filteredProducts = this.products
+      }
+    },
     changeSortTab(tab: object): void {
       this.activeSortTab = tab
       this.tooltip.show = false
+      this.sortProducts()
+    },
+    sortProducts() {
+      if (this.activeSortTab.type === 1) {
+        this.filteredProducts = this.filteredProducts.sort((a, b) => a.price - b.price)
+      } else if (this.activeSortTab.type === 2) {
+        this.filteredProducts = this.filteredProducts.sort((a, b) => b.price - a.price)
+      } else if (this.activeSortTab.type === 3) {
+        this.filteredProducts = this.filteredProducts.sort((a, b) => a.popularity - b.popularity)
+      }
     },
     setActiveCategory(category) {
       this.categories.forEach(currentCategory => {
         currentCategory.isActive = currentCategory.id === category.id
       })
+      this.getProducts(category.id)
     },
-    async initProducts() {
- /*     console.log(111)
-      const {data: responseCategories} = await useFetch('/api/catalog/getProducts',
+    async getProducts(categoryId) {
+      this.isLoading = true
+      const {data: responseProducts} = await useFetch('/api/catalog/getProducts',
           {
             query: {
-              category_id: this.selectedCategory,
+              category_id: categoryId,
             }
           }
       )
-      console.log(responseCategories)
-      this.products = responseCategories.value
-      console.log(this.products)*/
-    }
+      this.products = responseProducts.value
+      this.filterProductsByLength(10)
+      this.filterProductsByPrice()
+      this.sortProducts()
+      this.isLoading = false
+    },
   }
 }
 </script>

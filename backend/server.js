@@ -264,7 +264,6 @@ async function fetchCategories(){
 
 app.get('/api/catalog/getProducts', async (req, res) => {
     const categoryId = req.query.category_id;
-    console.log(categoryId)
     try {
         const response = await fetchProductsByCategory(categoryId);
         res.json(response);
@@ -281,6 +280,34 @@ async function fetchProductsByCategory(categoryId){
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('SELECT * FROM products WHERE category_id = ?', [categoryId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.get('/api/catalog/getProduct/', async (req, res) => {
+    const productId = req.query.product_id;
+    console.log(productId)
+    try {
+        const response = await fetchProductById(productId);
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchProductById(productId){
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM products WHERE id = ?', [productId], (error, results) => {
             if (error) {
                 reject(error);
             } else {

@@ -1,13 +1,13 @@
 <template>
   <div class="slider-container">
-
     <label for="slider-input-left" class="slider-input-left">
       <span class="_non-space price">Цена: </span>
       <input
           type="number"
+          :disabled="true"
           class="main-input-left"
           v-model="leftValue"
-          @input="updateSliderFromInput"
+          @input="updateSliderFromInput; updateMinMax"
       />
       <span class="_non-space rouble">№</span>
     </label>
@@ -15,9 +15,10 @@
       <span class="_non-space price">- </span>
       <input
           type="number"
+          :disabled="true"
           class="main-input-right"
           v-model="rightValue"
-          @input="updateSliderFromInput"
+          @input="updateSliderFromInput(); updateMinMax()"
       />
       <span class="_non-space rouble">№</span>
     </label>
@@ -28,7 +29,7 @@
         :animate="'fast'"
         :tooltip="'always'"
         range
-        @update:modelValue="updateInputsFromSlider"
+        @update:modelValue="updateInputsFromSlider; updateMinMax()"
     />
   </div>
 </template>
@@ -42,10 +43,11 @@ import 'vue-slider-component/dist-css/vue-slider-component.css'
 import 'vue-slider-component/theme/default.css'
 
 export default {
+  emits:['updateMinMax'],
   components: {
     VueSlider
   },
-props:{
+  props: {
     min: {
       type: Number,
       required: true
@@ -94,6 +96,7 @@ props:{
         rightValue.value = leftValue.value;
         leftValue.value = temp;
       }
+
     }
 
     return {
@@ -105,6 +108,11 @@ props:{
       updateInputsFromSlider,
       updateSliderFromInput
     };
+  },
+  methods: {
+    updateMinMax() {
+      this.$emit('updateMinMax', {leftValue: this.leftValue, rightValue: this.rightValue})
+    }
   }
 };
 </script>

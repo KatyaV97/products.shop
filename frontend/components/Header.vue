@@ -12,11 +12,12 @@
         </NuxtLink>
         <div class="search">
           <Input
-              :value="searchValue"
+              :value="searchInput.searchValue"
               :placeholder="'Поиск по товарам...'"
           />
           <MainButton
               :classes="['main', 'small']"
+              @click="initSearchProducts"
           >
             <p class="_non-space">Найти</p>
           </MainButton>
@@ -73,6 +74,9 @@
                 </clipPath>
               </defs>
             </svg>
+            <div class="count-basket-products">
+              <p class="_non-space count">{{ productsBasketCount }}</p>
+            </div>
           </div>
         </NuxtLink>
         <NuxtLink
@@ -101,12 +105,49 @@
 </template>
 
 <script lang="ts">
+import {useProductsStore} from "~/store/productsStore"
+
 export default {
   data() {
     return {
-      searchValue: '',
+      searchInput:  {
+        searchValue: '',
+        oldSearchValue: '',
+      },
       hasLogin: false
     }
+  },
+  setup() {
+    const productsStore = useProductsStore()
+
+    return {productsStore}
+  },
+  computed: {
+    productsBasketCount() {
+      return this.productsStore.getProductsBasketCount
+    }
+  },
+  methods: {
+    async initSearchProducts() {
+      if (this.searchInput.searchValue.trim() === '') {
+        this.productsStore.setProductsSearch([])
+        return
+      }
+      if (this.searchInput.searchValue.trim().length < 3 ||
+          this.searchInput.oldSearchValue === this.searchInput.searchValue.trim() &&
+          !hasNewParameter) return
+
+      this.loadingSearch = true
+
+      this.searchInput.oldSearchValue = this.searchInput.searchValue.trim()
+
+      await this.productsStore.initSearch({
+        searchValue: this.searchInput.searchValue.trim()
+      })
+
+      this.loadingSearch = false
+      this.openResult = true
+    },
   }
 }
 </script>
