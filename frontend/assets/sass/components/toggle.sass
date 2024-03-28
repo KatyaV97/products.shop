@@ -1,0 +1,33 @@
+.toggle-block
+  @include justify-content-center
+  align-items: center
+  gap: 0
+
+  .toggle
+    cursor: pointer
+    width: 32px
+    height: 38px
+    background-color: #000
+    @include justify-content-center
+    align-items: center
+    border: #332B00 2px solid
+
+  .main-input
+    @include justify-content-center
+    align-items: center
+    width: 32px
+    background-color: #000
+    border: none
+    outline: none
+    color: #FFD600
+    border-top: #332B00 2px solid
+    border-bottom: #332B00 2px solid
+    text-align: center
+    box-sizing: border-box
+    height: 42px
+
+  & input[type=number]
+    text-align: center
+    padding: 0
+    height: 42px
+    -moz-appearance: textfield

@@ -1,6 +1,5 @@
 .basket-card-container
   @include align-items-center
-  justify-content: flex-start
   gap: 40px
   padding: 20px 10px
   height: 180px
@@ -13,14 +12,16 @@
     width: 125px
     height: 140px
 
+  .toggle-block
+    @include align-items-center
+    justify-content: center
+    width: 25%
+
   .title
     width: 40%
     color: #FFF
     font-weight: 400
     @include default-mega-button-text
-
-  .toggle-block
-    width: 25%
 
   .price
     width: 25%
@@ -29,4 +30,3 @@
 
   .toggle-block
     justify-content: flex-start
-

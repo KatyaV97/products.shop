@@ -74,7 +74,10 @@
                 </clipPath>
               </defs>
             </svg>
-            <div class="count-basket-products">
+            <div
+                class="count-basket-products"
+                v-if="productsBasketCount > 0"
+            >
               <p class="_non-space count">{{ productsBasketCount }}</p>
             </div>
           </div>
@@ -110,7 +113,7 @@ import {useProductsStore} from "~/store/productsStore"
 export default {
   data() {
     return {
-      searchInput:  {
+      searchInput: {
         searchValue: '',
         oldSearchValue: '',
       },

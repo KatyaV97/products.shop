@@ -13,7 +13,7 @@
     <template v-slot:main-content>
       <div class="basket-container">
         <div class="basket-block"
-             v-if="products && products.length > 0"
+             v-if="productsInBasket && productsInBasket.length > 0"
         >
           <p class="_non-space title">Ваша корзина покупок</p>
           <div class="table-header">
@@ -25,11 +25,13 @@
           <div class="line"></div>
           <div class="basket-products">
             <template
-                v-for="product in products"
+                v-for="product in productsInBasket"
                 :key="product.title"
             >
               <BasketProductCard
                   :card-info="product"
+                  @increase="increase"
+                  @decrease="decrease"
               />
               <div class="line"></div>
             </template>
@@ -66,7 +68,9 @@
             <div class="result-block">
               <div class="result">
                 <p class="_non-space text-center">Итого:</p>
-                <p class="_non-space text-center result-text">{{ new Intl.NumberFormat('ru-RU').format(result) }}</p>
+                <p class="_non-space text-center result-text">{{
+                    new Intl.NumberFormat('ru-RU').format(resultPrice)
+                  }}</p>
               </div>
               <div class="result">
                 <p class="_non-space delivery">Доставка:</p>
@@ -103,6 +107,8 @@
 </template>
 
 <script lang="ts">
+import {useProductsStore} from "~/store/productsStore"
+
 export default {
   data() {
     return {
@@ -113,32 +119,35 @@ export default {
         email: '',
         isValid: true
       },
-      result: '1000' as string
     }
   },
   setup() {
-    const products = ref([
-      /*{
-        title: 'Товар 1',
-        price: 1000,
-        count: 1,
-      },
-      {
-        title: 'Товар 2',
-        price: 2000,
-        count: 2,
-      },
-      {
-        title: 'Товар 3',
-        price: 3000,
-        count: 3,
-      },*/
-    ])
+    const productsStore = useProductsStore()
     return {
-      products
+      productsStore
+    }
+  },
+  computed: {
+    productsInBasket() {
+      return this.productsStore.getProductsInBasket
+    },
+    resultPrice() {
+      return this.productsStore.getResultPrice
+    }
+  },
+  mounted() {
+    this.productsStore.initFromStore()
+  },
+  methods: {
+    decrease(cardInfo): void {
+      this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
+      this.productsStore.deleteProductFromBasketInStore({...cardInfo.cardInfo, count: cardInfo.count})
+    },
+    increase(cardInfo): void {
+      this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
+      this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: cardInfo.count})
     }
   }
-
 }
 </script>
 

@@ -8,7 +8,7 @@
         <img :src="cardInfo.urlImg" alt="Картинка товара"/>
         <p class="_non-space title">{{ cardInfo.title }}</p>
       </div>
-      <p class="_non-space price">{{ cardInfo.price }}</p>
+      <p class="_non-space price">{{ cardInfo.price }} <span class="rouble">№</span></p>
     </div>
   </NuxtLink>
 </template>

@@ -18,9 +18,19 @@ export const useProductsStore = defineStore('productsStore', {
             return this.productsInBasket
         },
 
+        getProductsInFavorite() {
+            return this.productsInFavorite
+        },
+
         getProductsBasketCount() {
             return this.productsInBasket.reduce((acc, product) => {
                 return acc + product.count
+            }, 0)
+        },
+
+        getResultPrice() {
+            return this.productsInBasket.reduce((acc, product) => {
+                return acc + (product.count * product.price)
             }, 0)
         }
     },
@@ -29,12 +39,29 @@ export const useProductsStore = defineStore('productsStore', {
             this.selectedCategory = id
         },
 
-        addProductsInBasket(selectedProduct, count) {
+        deleteProductFromBasket(selectedProduct) {
             if (this.productsInBasket && this.productsInBasket.length > 0) {
                 const index = this.productsInBasket.findIndex(product => {
                     return product.id === selectedProduct.id
                 })
                 if (index !== -1) {
+                    this.productsInBasket.splice(index, 1)
+                }
+            }
+            console.log(this.productsInBasket)
+        },
+
+        addProductsInBasket(selectedProduct, count) {
+            if(count === 0) {
+                this.deleteProductFromBasket(selectedProduct)
+                return
+            }
+            if (this.productsInBasket && this.productsInBasket.length > 0) {
+                const index = this.productsInBasket.findIndex(product => {
+                    return product.id === selectedProduct.id
+                })
+                if (index !== -1) {
+                    console.log( this.productsInBasket[index])
                     this.productsInBasket[index].count = count
                     return
                 }
@@ -43,7 +70,27 @@ export const useProductsStore = defineStore('productsStore', {
                     count: count
                 })
             }
+            console.log(this.productsInBasket)
         },
+
+        addProductsInFavorite(selectedProduct) {
+            this.productsInFavorite.push(selectedProduct)
+            console.log(this.productsInFavorite)
+        },
+
+        deleteProductFromFavorite(selectedProduct) {
+            if (this.productsInFavorite && this.productsInFavorite.length > 0) {
+                const index = this.productsInFavorite.findIndex(product => {
+                    return product.id === selectedProduct.id
+                })
+                if (index !== -1) {
+                    this.productsInFavorite.splice(index, 1)
+
+                }
+            }
+            console.log(this.productsInFavorite)
+        },
+
         setProductsSearch(value) {
             this.productsSearch = value
         },
@@ -90,14 +137,19 @@ export const useProductsStore = defineStore('productsStore', {
                     continue; // пропустит такие ключи, как "setItem", "getItem" и так далее
                 }
                 console.log(`${key}: ${localStorage.getItem(key)}`)
+                const product = JSON.parse(localStorage.getItem(key))
                 if (key.includes('basket')) {
-                    this.productsInBasket.push(localStorage.getItem(key))
+                    if (!this.productsInBasket.find(item => item.id === product.id)) {
+                        this.productsInBasket.push(product)
+                    }
                 }
                 if (key.includes('favorite')) {
-                    this.productsInFavorite.push(localStorage.getItem(key))
+                    if (!this.productsInFavorite.find(item => item.id === product.id)) {
+                        this.productsInFavorite.push(product)
+                    }
                 }
             }
-
+            console.log(this.productsInBasket)
             if (typeof this.getCookie('userId') !== 'undefined') {
                 const [{data: basketProducts}, {data: favoriteProducts}] = await Promise.all(
                     useFetch('api/basket/getProducts'), useFetch('api/favorite/getProducts'))

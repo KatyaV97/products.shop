@@ -32,25 +32,11 @@
             </div>
             <div class="bottom">
               <div class="buy-block">
-                <div class="toggle-block">
-                  <div
-                      class="toggle"
-                      @click="decrease"
-                  >-
-                  </div>
-                  <input
-                      class="main-input"
-                      type="number"
-                      :value="count.toString()"
-                      :max="100"
-                      :min="1"
-                  />
-                  <div
-                      class="toggle"
-                      @click="increase"
-                  >+
-                  </div>
-                </div>
+                <Toggle
+                    :count-product="count.toString()"
+                    @decrease="decrease"
+                    @increase="increase"
+                />
                 <MainButton
                     :classes="['main', 'big']"
                     @click="addToBasket"
@@ -162,14 +148,32 @@ export default {
   computed: {
     productsInBasket() {
       return this.productsStore.getProductsInBasket
+    },
+    productsInFavorite() {
+      return this.productsStore.getProductsInFavorite
     }
   },
   mounted() {
+    this.productsStore.initFromStore()
     this.checkProductInBasket()
+    this.checkProductInFavorite()
   },
   methods: {
     addToBasket() {
       this.productsStore.addProductsInBasket(this.product, this.count)
+      this.productsStore.saveProductFromBasket({...this.product, count: this.count})
+    },
+    checkProductInFavorite() {
+      if (this.productsInFavorite && this.productsInFavorite.length > 0) {
+        const index = this.productsInFavorite.findIndex(item => {
+          return item.id === this.product.id
+        })
+        if (index !== -1) {
+          this.product.isFavorite = true
+          return
+        }
+        this.product.isFavorite = false
+      }
     },
     checkProductInBasket() {
       if (this.productsInBasket && this.productsInBasket.length > 0) {
@@ -185,6 +189,14 @@ export default {
     },
     toggleHeart() {
       this.product.isFavorite = !this.product.isFavorite
+
+      if (this.product.isFavorite) {
+        this.productsStore.addProductsInFavorite(this.product)
+        this.productsStore.saveProductFromFavorite(this.product)
+        return
+      }
+      this.productsStore.deleteProductFromFavorite(this.product)
+      this.productsStore.deleteProductFromFavoriteInStore(this.product)
     },
     decrease() {
       const result = this.count - 1
