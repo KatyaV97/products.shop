@@ -17,10 +17,41 @@
           />
           <MainButton
               :classes="['main', 'small']"
+              :disabled="loadingSearch"
               @click="initSearchProducts"
           >
             <p class="_non-space">Найти</p>
           </MainButton>
+          <div
+              class="search-result"
+              v-if="true"
+          >
+            <div
+                class="search-result-block"
+                v-if="true"
+            >
+              <template
+                  v-for="product in productsSearch"
+                  :key="product.title"
+              >
+                <NuxtLink
+                    :to="`/products/${product.id}`"
+                    class="custom-link"
+                >
+                  <div class="search-result-item">
+                    <p class="_non-space">{{ product.title }}</p>
+                    <p class="_non-space">{{ product.price }}</p>
+                  </div>
+                </NuxtLink>
+              </template>
+            </div>
+            <div
+                class="search-result-block"
+                v-else
+            >
+              <p class="_non-space">Ничего не найдено</p>
+            </div>
+          </div>
         </div>
       </div>
       <NuxtLink
@@ -117,7 +148,9 @@ export default {
         searchValue: '',
         oldSearchValue: '',
       },
-      hasLogin: false
+      hasLogin: false,
+      openResult: false,
+      loadingSearch: false,
     }
   },
   setup() {
@@ -127,6 +160,9 @@ export default {
   computed: {
     productsBasketCount() {
       return this.productsStore.getProductsBasketCount
+    },
+    productsSearch() {
+      return this.productsStore.getProductsSearch
     }
   },
   methods: {
@@ -135,11 +171,9 @@ export default {
         this.productsStore.setProductsSearch([])
         return
       }
-      if (this.searchInput.searchValue.trim().length < 3 ||
-          this.searchInput.oldSearchValue === this.searchInput.searchValue.trim() &&
-          !hasNewParameter) return
 
       this.loadingSearch = true
+      this.openResult = false
 
       this.searchInput.oldSearchValue = this.searchInput.searchValue.trim()
 

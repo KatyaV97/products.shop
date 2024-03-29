@@ -32,6 +32,10 @@ export const useProductsStore = defineStore('productsStore', {
             return this.productsInBasket.reduce((acc, product) => {
                 return acc + (product.count * product.price)
             }, 0)
+        },
+
+        getProductsSearch() {
+            return this.productsSearch
         }
     },
     actions: {
