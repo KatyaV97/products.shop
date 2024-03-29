@@ -1,6 +1,11 @@
 <template>
   <div class="basket-card-container">
-    <img class="ico" :src="cardInfo.urlImg" alt="Картинка товара"/>
+    <img
+        @click="moveToProductPage(cardInfo)"
+        class="ico"
+        :src="cardInfo.urlImg"
+        alt="Картинка товара"
+    />
     <p class="_non-space title">{{ cardInfo.title }}</p>
     <Toggle
         :count-product="cardInfo.count.toString()"
@@ -34,8 +39,10 @@ export default {
     },
     increase(count): void {
       this.$emit('increase', {cardInfo: this.cardInfo, count: count})
+    },
+    moveToProductPage(product: any) {
+      this.$router.push(`/products/${product.id}`)
     }
-
   }
 }
 </script>
