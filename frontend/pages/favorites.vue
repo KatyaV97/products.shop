@@ -13,7 +13,7 @@
     <template v-slot:main-content>
       <div class="favorites-container">
         <div class="favorites-block"
-             v-if="products && products.length > 0"
+             v-if="productsInFavorite && productsInFavorite.length > 0"
         >
           <p class="_non-space title">Ваш список избранного</p>
           <div class="table-header">
@@ -25,7 +25,7 @@
           <div class="line"></div>
           <div class="favorites-products">
             <template
-                v-for="product in products"
+                v-for="product in productsInFavorite"
                 :key="product.title"
             >
               <FavoriteProductCard
@@ -58,6 +58,8 @@
 </template>
 
 <script lang="ts">
+import {useProductsStore} from "~/store/productsStore"
+
 export default {
   data() {
     return {
@@ -65,27 +67,20 @@ export default {
     }
   },
   setup() {
-    const products = ref([
-      {
-        title: 'Товар 1',
-        price: 1000,
-        count: 1,
-      },
-      {
-        title: 'Товар 2',
-        price: 2000,
-        count: 2,
-      },
-      {
-        title: 'Товар 3',
-        price: 3000,
-        count: 3,
-      },
-    ])
+    const productsStore = useProductsStore()
     return {
-      products
+      productsStore
     }
-  }
+  },
+  computed: {
+    productsInFavorite() {
+      return this.productsStore.getProductsInFavorite
+    },
+  },
+  mounted() {
+    this.productsStore.initFromStore()
+  },
+
 }
 </script>
 

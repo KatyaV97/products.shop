@@ -48,11 +48,11 @@ export const useProductsStore = defineStore('productsStore', {
                     this.productsInBasket.splice(index, 1)
                 }
             }
-            console.log(this.productsInBasket)
         },
 
         addProductsInBasket(selectedProduct, count) {
-            if(count === 0) {
+            console.log(selectedProduct, count)
+            if (count === 0) {
                 this.deleteProductFromBasket(selectedProduct)
                 return
             }
@@ -65,11 +65,11 @@ export const useProductsStore = defineStore('productsStore', {
                     this.productsInBasket[index].count = count
                     return
                 }
-                this.productsInBasket.push({
-                    ...selectedProduct,
-                    count: count
-                })
             }
+            this.productsInBasket.push({
+                ...selectedProduct,
+                count: count
+            })
             console.log(this.productsInBasket)
         },
 
@@ -88,7 +88,6 @@ export const useProductsStore = defineStore('productsStore', {
 
                 }
             }
-            console.log(this.productsInFavorite)
         },
 
         setProductsSearch(value) {
@@ -130,13 +129,25 @@ export const useProductsStore = defineStore('productsStore', {
             const parts = value.split(`; ${name}=`)
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-
-        async initFromStore() {
+        clearBasket(){
+            this.productsInBasket = []
             for (let key in localStorage) {
                 if (!localStorage.hasOwnProperty(key)) {
                     continue; // пропустит такие ключи, как "setItem", "getItem" и так далее
                 }
                 console.log(`${key}: ${localStorage.getItem(key)}`)
+                const product = JSON.parse(localStorage.getItem(key))
+                console.log(key.includes('basket'))
+                if (key.includes('basket')) {
+                    localStorage.removeItem('basket ' + product.id + ' ' + product.title)
+                }
+            }
+        },
+        async initFromStore() {
+            for (let key in localStorage) {
+                if (!localStorage.hasOwnProperty(key)) {
+                    continue; // пропустит такие ключи, как "setItem", "getItem" и так далее
+                }
                 const product = JSON.parse(localStorage.getItem(key))
                 if (key.includes('basket')) {
                     if (!this.productsInBasket.find(item => item.id === product.id)) {
@@ -149,7 +160,7 @@ export const useProductsStore = defineStore('productsStore', {
                     }
                 }
             }
-            console.log(this.productsInBasket)
+
             if (typeof this.getCookie('userId') !== 'undefined') {
                 const [{data: basketProducts}, {data: favoriteProducts}] = await Promise.all(
                     useFetch('api/basket/getProducts'), useFetch('api/favorite/getProducts'))

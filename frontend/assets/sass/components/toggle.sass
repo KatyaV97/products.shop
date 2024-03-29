@@ -12,6 +12,16 @@
     align-items: center
     border: #332B00 2px solid
 
+  .left
+    border-top: #332B00 2px solid
+    border-bottom: #332B00 2px solid
+    background-color: #000
+    width: 32px
+    padding-left: 10px
+    height: 38px
+    @include justify-content-center
+    align-items: center
+
   .main-input
     @include justify-content-center
     align-items: center
@@ -20,14 +30,12 @@
     border: none
     outline: none
     color: #FFD600
-    border-top: #332B00 2px solid
-    border-bottom: #332B00 2px solid
     text-align: center
     box-sizing: border-box
-    height: 42px
+    height: 32px
 
   & input[type=number]
     text-align: center
     padding: 0
-    height: 42px
+    height: 32px
     -moz-appearance: textfield

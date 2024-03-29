@@ -162,6 +162,7 @@ export default {
     addToBasket() {
       this.productsStore.addProductsInBasket(this.product, this.count)
       this.productsStore.saveProductFromBasket({...this.product, count: this.count})
+      console.log(this.productsInBasket)
     },
     checkProductInFavorite() {
       if (this.productsInFavorite && this.productsInFavorite.length > 0) {

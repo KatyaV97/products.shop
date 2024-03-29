@@ -149,3 +149,19 @@ $big-radius: $step * 4
   100%
     transform: scale(1.2)
     opacity: 0
+
+@keyframes down-alerts-on
+  0%
+    transform: translate(-50%, -150%)
+    opacity: 0
+  100%
+    transform: translate(-50%, 0)
+    opacity: 1
+
+@keyframes down-alerts-off
+  0%
+    transform: translate(-50%, 0) scale(1)
+    opacity: 1
+  100%
+    transform: translate(-50%, 0) scale(1.2)
+    opacity: 0

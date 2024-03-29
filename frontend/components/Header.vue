@@ -122,7 +122,6 @@ export default {
   },
   setup() {
     const productsStore = useProductsStore()
-
     return {productsStore}
   },
   computed: {

@@ -223,7 +223,7 @@ async function fetchPopularCategories() {
     });
 }
 
-async function fetchPopularProducts(){
+async function fetchPopularProducts() {
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('SELECT * FROM popular_products', (error, results) => {
@@ -249,7 +249,7 @@ app.get('/api/catalog/getCategories', async (req, res) => {
     }
 });
 
-async function fetchCategories(){
+async function fetchCategories() {
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('SELECT * FROM categories', (error, results) => {
@@ -276,7 +276,7 @@ app.get('/api/catalog/getProducts', async (req, res) => {
     }
 });
 
-async function fetchProductsByCategory(categoryId){
+async function fetchProductsByCategory(categoryId) {
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('SELECT * FROM products WHERE category_id = ?', [categoryId], (error, results) => {
@@ -304,7 +304,7 @@ app.get('/api/catalog/getProduct/', async (req, res) => {
     }
 });
 
-async function fetchProductById(productId){
+async function fetchProductById(productId) {
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('SELECT * FROM products WHERE id = ?', [productId], (error, results) => {
@@ -316,6 +316,41 @@ async function fetchProductById(productId){
         });
     });
 }
+
+app.post('/api/basket/task', async (req, res) => {
+    console.log( req.body)
+    const {products, name, phoneNumber, email} = req.body
+    console.log(products, name, phoneNumber, email)
+    try {
+        const response = await createTask(JSON.parse(products), name, phoneNumber, email);
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function createTask(products, name, phoneNumber, email) {
+    const queries = Object.entries(products).map(([productId, count]) => {
+        console.log(productId, count)
+        return new Promise((resolve, reject) => {
+            // Query the database
+            connection.query('INSERT INTO tasks (product_id, count, name, phone_number, email) VALUES (?, ?, ?, ?, ?)', [productId, count, name, phoneNumber, email], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve({message: 'Task created successfully'});
+                }
+            });
+        });
+    });
+
+    return Promise.all(queries);
+}
+
 
 const start = () => {
     try {

@@ -5,14 +5,16 @@
         @click="decrease"
     >-
     </div>
-    <input
-        class="main-input"
-        type="number"
-        :disabled="true"
-        :value="countProduct"
-        :max="max"
-        :min="min"
-    />
+    <div class="left">
+      <input
+          class="main-input"
+          type="number"
+          :disabled="true"
+          :value="countProduct"
+          :max="max"
+          :min="min"
+      />
+    </div>
     <div
         class="toggle"
         @click="increase"

@@ -1,0 +1,43 @@
+.alert
+  gap: $step * 2
+  max-width: $step * 150
+  margin: 0
+  width: fit-content
+  -moz-fit-content: fit-content
+  padding: $step * 4
+  border-radius: $step * 4
+  background-color: $white-neutral-0
+  color: #1D1D1D
+  box-shadow: 0 6px $step * 8 0 rgba(0, 0, 0, 0.08)
+  position: fixed
+  z-index: 10
+  top: $step * 14
+  left: 50%
+  cursor: default
+
+  .done
+    @include align-items-center
+    justify-content: center
+    height: $step * 6
+    width: $step * 6
+    flex-shrink: 0
+
+  &._hidden
+    display: none
+    pointer-events: none
+
+  &._show
+    display: flex
+    align-items: center
+    justify-content: center
+    animation: down-alerts-on 0.6s ease-in-out
+    transform: translate(-50%, 0)
+    pointer-events: auto
+
+  &._done
+    display: flex
+    align-items: center
+    justify-content: center
+    animation: down-alerts-off 0.6s ease-in-out
+    animation-fill-mode: forwards
+    pointer-events: none

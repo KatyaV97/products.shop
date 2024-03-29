@@ -4,6 +4,12 @@
       {{ pageTitle }}
     </Title>
   </Head>
+  <Alert
+      @focus="getAlertFocusStatus"
+      :show="alert.visible"
+      :value="alert.text"
+  />
+
   <MainContainer
       :has-img="false"
   >
@@ -39,27 +45,31 @@
           <div class="request-block">
             <div class="inputs-block">
               <div class="top-input">
-                <label
-                    v-if="!userInput.isValid"
-                    for="main-input"
-                    class="error">
-                  Некорректный адрес электронной почты
-                </label>
                 <input
                     class="main-input"
                     :placeholder="'Имя пользователя'"
                     :value="userInput.name"
+                    @input="setValue('name', $event.target.value)"
                 />
               </div>
               <input
                   class="main-input"
                   :placeholder="'Email'"
                   :value="userInput.email"
+                  @input="setValue('email', $event.target.value)"
               />
+              <label
+                  v-if="error.visible"
+                  for="main-input"
+                  class="error">
+                Некорректный адрес электронной почты
+              </label>
               <input
                   class="main-input"
-                  :placeholder="'Password'"
-                  :value="userInput.password"
+                  :placeholder="'Номер телефона'"
+                  :value="userInput.phoneNumber"
+                  v-maska data-maska="+7 ### ### ####"
+                  @input="setValue('phoneNumber', $event.target.value)"
               />
             </div>
             <div class="info-block">Пожалуйста, внесите свои данные, чтобы мы могли связаться с вами и принять вашу
@@ -78,6 +88,8 @@
               </div>
               <MainButton
                   :classes="['main', 'for-auth']"
+                  :disabled="!userInput.isValid"
+                  @click="sendIssue"
               >
                 Оставить заявку
               </MainButton>
@@ -115,10 +127,19 @@ export default {
       pageTitle: 'Night store. Корзина' as string,
       userInput: {
         name: '',
-        password: '',
+        phoneNumber: '',
         email: '',
-        isValid: true
+        isValid: false
       },
+      alert: {
+        text: '',
+        visible: false,
+        focus: false,
+        stoped: false,
+      },
+      error: {
+        visible: false
+      }
     }
   },
   setup() {
@@ -139,6 +160,9 @@ export default {
     this.productsStore.initFromStore()
   },
   methods: {
+    getAlertFocusStatus(status: boolean): boolean {
+      return this.alert.focus = status
+    },
     decrease(cardInfo): void {
       this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
       this.productsStore.deleteProductFromBasketInStore({...cardInfo.cardInfo, count: cardInfo.count})
@@ -146,7 +170,69 @@ export default {
     increase(cardInfo): void {
       this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
       this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: cardInfo.count})
-    }
+    },
+    setValue(key: string, value: string): void {
+      if (key === 'phoneNumber' && value.length > 16) return
+
+      this.userInput[key] = value
+      this.userInput.isValid = this.validateEmail(this.userInput.email) &&
+          this.userInput.name.length > 0 &&
+          this.validatePhoneNumber(this.userInput.phoneNumber)
+    },
+    validateEmail(email: string): boolean {
+      const re = /\S+@\S+\.\S+/
+      return re.test(email)
+    },
+    validatePhoneNumber(phoneNumber: string): boolean {
+      const phone = phoneNumber.replaceAll(' ', '')
+      return phone.length === 12
+    },
+    clearInput() {
+      this.userInput.phoneNumber = ''
+      this.userInput.name = ''
+      this.userInput.email = ''
+      this.userInput.isValid = false
+    },
+    async sendIssue() {
+      this.userInput.isValid = false
+      let products = {}
+      this.productsInBasket.forEach(product => {
+        products = {
+          ...products,
+          [product.id]: product.count
+        }
+      })
+      const response = await useFetch('api/basket/sendTask', {
+        query: {
+          products: products,
+          name: this.userInput.name,
+          phoneNumber: this.userInput.phoneNumber,
+          email: this.userInput.email,
+        }
+      })
+      if (!response.data.error) {
+        console.log(response.data)
+        this.clearInput()
+        this.alert.visible = true
+        this.alert.text = 'Заявка отправлена. Мы с вами свяжемся'
+        await this.closeAlert()
+        this.productsStore.clearBasket()
+      }
+    },
+    async closeAlert(): Promise<void> {
+      setTimeout(() => {
+        if (!this.alert.focus) {
+          this.alert.stoped = false
+          this.alert.visible = false
+          setTimeout(() => {
+            this.alert.text = ''
+          }, 600)
+        } else {
+          this.alert.stoped = true
+          this.alert.visible = true
+        }
+      }, 5000)
+    },
   }
 }
 </script>
