@@ -43,7 +43,7 @@ function generateTokens(payload) {
  */
 app.post('/api/auth/login/', async (req, res) => {
     const params = req.body;
-    console.log(req.body)
+
     try {
         const response = await fetchFromDatabase(params);
         if (response) {
@@ -111,7 +111,7 @@ app.post('/api/auth/register', async (req, res) => {
     try {
         // Perform necessary operations here, like adding data to the database
         const response = await createAccount(params);
-        console.log(response)
+
         const user = {id: response.userId, name: params.name};
         const tokens = generateTokens(user);
 
@@ -178,10 +178,8 @@ app.post('/api/auth/refresh-token', async (req, res) => {
  * Handle get popular categories
  */
 app.get('/api/popular/categories', async (req, res) => {
-    console.log(111)
     try {
         const response = await fetchPopularCategories();
-        console.log(response)
         res.json(response);
     } catch (exception) {
         res.status(500).json({
@@ -291,7 +289,7 @@ async function fetchProductsByCategory(categoryId) {
 
 app.get('/api/catalog/getProduct/', async (req, res) => {
     const productId = req.query.product_id;
-    console.log(productId)
+
     try {
         const response = await fetchProductById(productId);
         res.json(response);
@@ -318,9 +316,7 @@ async function fetchProductById(productId) {
 }
 
 app.post('/api/basket/task', async (req, res) => {
-    console.log( req.body)
     const {products, name, phoneNumber, email} = req.body
-    console.log(products, name, phoneNumber, email)
     try {
         const response = await createTask(JSON.parse(products), name, phoneNumber, email);
         res.json(response);
@@ -335,7 +331,6 @@ app.post('/api/basket/task', async (req, res) => {
 
 async function createTask(products, name, phoneNumber, email) {
     const queries = Object.entries(products).map(([productId, count]) => {
-        console.log(productId, count)
         return new Promise((resolve, reject) => {
             // Query the database
             connection.query('INSERT INTO tasks (product_id, count, name, phone_number, email) VALUES (?, ?, ?, ?, ?)', [productId, count, name, phoneNumber, email], (error, results) => {
@@ -351,6 +346,33 @@ async function createTask(products, name, phoneNumber, email) {
     return Promise.all(queries);
 }
 
+app.get('/api/catalog/getSearchProducts/', async (req, res) => {
+    const prompt = req.query.prompt;
+    try {
+        const response = await fetchProductsByPrompt(prompt);
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchProductsByPrompt(prompt) {
+    return new Promise((resolve, reject) => {
+        const values = [`%${prompt}%`, `%${prompt}%`];
+        // Query the database
+        connection.query('SELECT * FROM products WHERE title LIKE ? OR description LIKE ?', values, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
 
 const start = () => {
     try {

@@ -8,7 +8,6 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
-    console.log(params)
 
     try {
         return await $fetch(`${BASKET}/task`,

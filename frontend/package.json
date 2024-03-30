@@ -20,6 +20,7 @@
     "@nuxt/image": "^1.1.0",
     "@nuxtjs/svg-sprite": "^1.0.2",
     "@pinia/nuxt": "^0.5.1",
+    "click-outside-vue3": "^4.0.1",
     "maska": "^2.1.11",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",

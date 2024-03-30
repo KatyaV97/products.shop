@@ -157,7 +157,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.selectedCategory)
     if (this.categories && this.categories.length > 0) {
       this.categories.forEach(category => {
         category.isActive = category.id === this.selectedCategory

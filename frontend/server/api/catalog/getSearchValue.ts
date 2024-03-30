@@ -3,13 +3,13 @@ import {H3Event} from "h3"
 
 /**
  * Method: GET
- * Получение товаров по id категории
+ * Получение товаров по слову в строке поиска
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await $fetch(`${CATALOG}/getProducts/?category_id=${params.category_id}`,
+        return await $fetch(`${CATALOG}/getSearchProducts/?prompt=${params.searchValue}`,
             {
                 method: 'GET',
             }

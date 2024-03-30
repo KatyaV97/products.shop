@@ -55,7 +55,6 @@ export const useProductsStore = defineStore('productsStore', {
         },
 
         addProductsInBasket(selectedProduct, count) {
-            console.log(selectedProduct, count)
             if (count === 0) {
                 this.deleteProductFromBasket(selectedProduct)
                 return
@@ -65,7 +64,6 @@ export const useProductsStore = defineStore('productsStore', {
                     return product.id === selectedProduct.id
                 })
                 if (index !== -1) {
-                    console.log( this.productsInBasket[index])
                     this.productsInBasket[index].count = count
                     return
                 }
@@ -74,12 +72,10 @@ export const useProductsStore = defineStore('productsStore', {
                 ...selectedProduct,
                 count: count
             })
-            console.log(this.productsInBasket)
         },
 
         addProductsInFavorite(selectedProduct) {
             this.productsInFavorite.push(selectedProduct)
-            console.log(this.productsInFavorite)
         },
 
         deleteProductFromFavorite(selectedProduct) {
@@ -133,15 +129,13 @@ export const useProductsStore = defineStore('productsStore', {
             const parts = value.split(`; ${name}=`)
             if (parts.length === 2) return parts.pop().split(';').shift()
         },
-        clearBasket(){
+        clearBasket() {
             this.productsInBasket = []
             for (let key in localStorage) {
                 if (!localStorage.hasOwnProperty(key)) {
                     continue; // пропустит такие ключи, как "setItem", "getItem" и так далее
                 }
-                console.log(`${key}: ${localStorage.getItem(key)}`)
                 const product = JSON.parse(localStorage.getItem(key))
-                console.log(key.includes('basket'))
                 if (key.includes('basket')) {
                     localStorage.removeItem('basket ' + product.id + ' ' + product.title)
                 }
@@ -184,6 +178,14 @@ export const useProductsStore = defineStore('productsStore', {
                     }
                 })
             }
+        },
+
+        async initSearch(placeholder) {
+            const {data} = await useFetch('api/catalog/getSearchValue', {
+                    query: placeholder
+                }
+            )
+            this.productsSearch = data.value
         }
     }
 })

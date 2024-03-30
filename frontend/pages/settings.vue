@@ -86,7 +86,6 @@ export default {
   async mounted() {
     if (!this.authUserStore.userName &&
         !this.authUserStore.getUserName) {
-      console.log(this.authUserStore.userName)
       await navigateTo('/auth', {
         external: true
       })

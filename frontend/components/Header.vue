@@ -10,10 +10,18 @@
             <img src="/night.png" alt="Логотип компании">
           </div>
         </NuxtLink>
-        <div class="search">
+        <div
+            v-click-outside="closeSearchBlock"
+            class="search"
+            @mouseenter="onFocus"
+            @mouseleave="onBlur"
+            @touchmove="stopScroll"
+        >
           <Input
               :value="searchInput.searchValue"
               :placeholder="'Поиск по товарам...'"
+              @update-invalid="openSearchResult"
+              @input="setValue"
           />
           <MainButton
               :classes="['main', 'small']"
@@ -24,33 +32,39 @@
           </MainButton>
           <div
               class="search-result"
-              v-if="true"
+              v-if="openResult"
           >
-            <div
-                class="search-result-block"
-                v-if="true"
+            <perfect-scrollbar
+                class="preview-scroll"
             >
-              <template
-                  v-for="product in productsSearch"
-                  :key="product.title"
+              <div
+                  class="search-result-block"
+                  v-if="productsSearch && productsSearch.length > 0"
               >
-                <NuxtLink
-                    :to="`/products/${product.id}`"
-                    class="custom-link"
+                <template
+                    v-for="product in productsSearch"
+                    :key="product.title"
                 >
-                  <div class="search-result-item">
-                    <p class="_non-space">{{ product.title }}</p>
-                    <p class="_non-space">{{ product.price }}</p>
-                  </div>
-                </NuxtLink>
-              </template>
-            </div>
-            <div
-                class="search-result-block"
-                v-else
-            >
-              <p class="_non-space">Ничего не найдено</p>
-            </div>
+                  <NuxtLink
+                      :to="`/products/${product.id}`"
+                      class="custom-link"
+                  >
+                    <div class="search-result-item">
+                      <p class="_non-space">{{ product.title }}</p>
+                      <p class="_non-space">{{ product.price }}</p>
+                    </div>
+                  </NuxtLink>
+                </template>
+              </div>
+              <div
+                  class="search-result-block"
+                  v-else
+              >
+                <div class="search-result-item empty">
+                  <p class="_non-space">Ничего не найдено</p>
+                </div>
+              </div>
+            </perfect-scrollbar>
           </div>
         </div>
       </div>
@@ -140,8 +154,14 @@
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import {useAuthUserStore} from "~/store/authUserStore";
+import {PerfectScrollbar} from 'vue3-perfect-scrollbar'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 export default {
+  components: {
+    PerfectScrollbar
+  },
   data() {
     return {
       searchInput: {
@@ -151,11 +171,20 @@ export default {
       hasLogin: false,
       openResult: false,
       loadingSearch: false,
+      focus: false,
+      brake: false,
     }
+  },
+  unmounted() {
+    this.productsStore.setProductsSearch([])
   },
   setup() {
     const productsStore = useProductsStore()
-    return {productsStore}
+    const authUserStore = useAuthUserStore()
+    return {
+      productsStore,
+      authUserStore
+    }
   },
   computed: {
     productsBasketCount() {
@@ -163,17 +192,36 @@ export default {
     },
     productsSearch() {
       return this.productsStore.getProductsSearch
+    },
+    userId() {
+      const userId = useCookie('userId')
+      return userId.value
     }
   },
+  mounted() {
+    this.checkAuth()
+  },
   methods: {
+    checkAuth() {
+      if (this.userId !== null && this.userId !== undefined &&
+          this.userId !== '') {
+        this.hasLogin = true
+        return
+      }
+      this.hasLogin = false
+    },
+    openSearchResult() {
+      if (this.productsSearch && this.productsSearch.length > 0) {
+        this.openResult = true
+      }
+    },
     async initSearchProducts() {
+      this.openResult = false
+
       if (this.searchInput.searchValue.trim() === '') {
         this.productsStore.setProductsSearch([])
         return
       }
-
-      this.loadingSearch = true
-      this.openResult = false
 
       this.searchInput.oldSearchValue = this.searchInput.searchValue.trim()
 
@@ -183,6 +231,31 @@ export default {
 
       this.loadingSearch = false
       this.openResult = true
+    },
+    setValue(value) {
+      this.searchInput.searchValue = value
+    },
+    closeSearchBlock() {
+      this.openResult = false
+      this.loadingSearch = false
+      this.removeStoped()
+    },
+    onFocus(): void {
+      this.stopScroll()
+    },
+    onBlur(): void {
+      this.removeStoped()
+    },
+    event(e: Event): void {
+      e.preventDefault();
+    },
+    stopScroll(): void {
+      document.querySelector('.search').addEventListener('wheel', this.event, {passive: false})
+      document.querySelector('.search').addEventListener('touchmove', this.event)
+    },
+    removeStoped(): void {
+      document.querySelector('.search').removeEventListener('wheel', this.event)
+      document.querySelector('.search').removeEventListener('touchmove', this.event)
     },
   }
 }

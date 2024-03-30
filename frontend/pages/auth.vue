@@ -167,7 +167,6 @@ export default {
             this.userInput.password.replaceAll(' ', '') !== '' &&
             this.isValidEmail(this.userInput.email) &&
             this.userInput.name.replaceAll(' ', '') !== ''
-        console.log(isValid)
         this.disabledSubmitButton = !isValid
       }
     },
@@ -175,19 +174,19 @@ export default {
       if (this.disabledSubmitButton) return
 
       this.disabledSubmitButton = true
-      console.log(this.userInput)
       const response = await useFetch('/api/auth/loginWithPassword', {
         query: {
           email: this.userInput.email,
           password: this.userInput.password
         }
       })
-      console.log(response.data)
+
       this.data = response.data.value
       if (this.data.error) {
         this.userInput.isValid = false
       } else {
         this.authUserStore.setUserName(this.data.name)
+        this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
         await navigateTo('/', {
@@ -197,7 +196,6 @@ export default {
     },
     async registration() {
       this.disabledSubmitButton = true
-      console.log(this.userInput)
       const response = await useFetch('/api/auth/createAccount', {
         query: {
           name: this.userInput.name,
@@ -205,7 +203,6 @@ export default {
           password: this.userInput.password
         }
       })
-      console.log(response.data)
       this.data = response.data.value
       if (this.data.error) {
         this.userInput.isValid = false

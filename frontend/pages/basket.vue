@@ -211,7 +211,6 @@ export default {
         }
       })
       if (!response.data.error) {
-        console.log(response.data)
         this.clearInput()
         this.alert.visible = true
         this.alert.text = 'Заявка отправлена. Мы с вами свяжемся'

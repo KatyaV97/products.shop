@@ -5,6 +5,7 @@ export const useAuthUserStore = defineStore('authUserStore', {
         refreshToken: null as string | null,
         accessToken: null as string | null,
         userName: null as string | null,
+        userId: null as string | null,
     }),
     getters: {
         getRefreshToken(): null | string {
@@ -31,11 +32,11 @@ export const useAuthUserStore = defineStore('authUserStore', {
             }
             return result
         },
-        getUserId() {
-            const userName = useCookie('userId')
-            let result = this.userName
-            if (!this.userName && typeof userName.value === 'string') {
-                result = userName.value
+        getUserId(): null | string {
+            const userId = useCookie('userId')
+            let result: string | null = this.userId
+            if (!this.userId && typeof userId.value === 'string') {
+                result = userId.value
             }
             return result
         },
@@ -52,13 +53,11 @@ export const useAuthUserStore = defineStore('authUserStore', {
             access.value = value
         },
         setUserName(value: string): void {
-            console.log( this.userName)
             const access = useCookie('userName')
             this.userName = value
             access.value = value
         },
-        setUserId(value) {
-            console.log(this.userId)
+        setUserId(value: string): void  {
             const access = useCookie('userId')
             this.userId = value
             access.value = value

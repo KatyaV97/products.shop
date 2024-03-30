@@ -125,7 +125,6 @@ export default {
   async setup() {
     const productsStore = useProductsStore()
     const route = useRoute()
-    console.log(route.params.id)
 
     const [{data: responseProduct}, {data: responsePopularProducts}] = await Promise.all(
         [useFetch('/api/catalog/getProductById', {
@@ -137,7 +136,6 @@ export default {
 
     const product = responseProduct.value[0]
     const popularProducts = responsePopularProducts.value
-    console.log(product)
 
     return {
       product,
@@ -162,7 +160,6 @@ export default {
     addToBasket() {
       this.productsStore.addProductsInBasket(this.product, this.count)
       this.productsStore.saveProductFromBasket({...this.product, count: this.count})
-      console.log(this.productsInBasket)
     },
     checkProductInFavorite() {
       if (this.productsInFavorite && this.productsInFavorite.length > 0) {

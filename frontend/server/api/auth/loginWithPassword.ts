@@ -7,8 +7,6 @@ import {H3Event} from "h3"
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
-    console.log(`${AUTH}/login`)
-    console.log(params)
     let myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Accept', 'application/json');

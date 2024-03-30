@@ -46,18 +46,52 @@
         cursor: pointer
         position: relative
 
+  .preview-scroll
+    height: 150px
+    padding: 4px
+
+  .active-y, .ps__rail-y
+    display: block
+
+  .ps__thumb-y
+    background-color: #FFFFFF
+    width: 4px
+    visibility: visible
+
+  .search-result-block
+    @include direction-column
+    box-sizing: border-box
+    max-height: 250px
+    height: 100%
+
   .search-result
+    z-index: 100
     @include direction-column
     gap: 15px
     background-color: rgba(0, 0, 0, 0.5)
     position: absolute
-    max-height: 200px
-    height: 100px
+    box-sizing: border-box
+    max-height: 250px
+    min-height: 65px
     width: 100%
-    bottom: -100px
+    top: 30px
     left: 0
     color: #FFFFFF
     font-size: 15px
+    padding: 5px
+    font-weight: 600
+
+    .search-result-item
+      @include align-items-center
+      justify-content: space-between
+      padding: 15px 15px
+      box-sizing: border-box
+
+      &:hover
+        &:not(.empty)
+          background-color: #000
+          border-radius: 15px
+          cursor: pointer
 
   .count-basket-products
     position: absolute

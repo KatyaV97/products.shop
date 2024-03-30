@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     },
     plugins: [
         {
-            src: '@/plugins/maska.ts'
+            src: '@/plugins/maska.ts',
         },
     ],
     app: {
