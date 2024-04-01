@@ -8,7 +8,7 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
-
+    console.log(params)
     try {
         return await useCustomFetch(`${BASKET}/addProduct`,
             event,
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
                 method: 'POST',
                 body: {
                     product_id: params.product_id,
-                    user_id: params.user_id,
+                    count: params.count,
                 }
             }
         )

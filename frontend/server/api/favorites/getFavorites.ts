@@ -8,9 +8,10 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
+    const user_id = useCookie('userId', event)
 
     try {
-        return await useCustomFetch(`${FAVORITES}/getFavorites/${params.user_id}`,
+        return await useCustomFetch(`${FAVORITES}/getFavorites/${user_id}`,
             event,
             {
                 method: 'GET',

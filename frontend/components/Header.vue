@@ -32,7 +32,7 @@
           </MainButton>
           <div
               class="search-result"
-              v-if="openResult"
+              v-if="openResult && productsSearch && productsSearch.length > 0"
           >
             <perfect-scrollbar
                 class="preview-scroll"
@@ -56,15 +56,15 @@
                   </NuxtLink>
                 </template>
               </div>
-              <div
-                  class="search-result-block"
-                  v-else
-              >
-                <div class="search-result-item empty">
-                  <p class="_non-space">Ничего не найдено</p>
-                </div>
-              </div>
             </perfect-scrollbar>
+          </div>
+          <div
+              class="search-result empty-block"
+              v-else-if="openResult && productsSearch && productsSearch.length === 0"
+          >
+            <div class="search-result-item empty">
+              <p class="_non-space">Ничего не найдено</p>
+            </div>
           </div>
         </div>
       </div>

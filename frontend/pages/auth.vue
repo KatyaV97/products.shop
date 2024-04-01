@@ -114,6 +114,7 @@
 
 <script lang="js">
 import {useAuthUserStore} from "~/store/authUserStore";
+import {useProductsStore} from "~/store/productsStore"
 
 export default {
   data() {
@@ -133,7 +134,11 @@ export default {
   },
   setup() {
     const authUserStore = useAuthUserStore()
-    return {authUserStore}
+    const productsStore = useProductsStore()
+    return {
+      authUserStore,
+      productsStore
+    }
   },
   methods: {
     toRegistration() {
@@ -189,6 +194,7 @@ export default {
         this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
+        this.productsStore.initFromDB()
         await navigateTo('/', {
           external: true
         })
@@ -211,6 +217,7 @@ export default {
         this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
+        this.productsStore.initFromDB()
         await navigateTo('/settings', {
           external: true
         })

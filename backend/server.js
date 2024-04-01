@@ -342,8 +342,132 @@ async function createTask(products, name, phoneNumber, email) {
             });
         });
     });
-
     return Promise.all(queries);
+}
+
+app.get('/api/basket/getProducts/', async (req, res) => {
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await fetchProductsByIds(user.id);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function fetchProductsByIds(userId) {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT * FROM basket_products WHERE user_id = ?', [userId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.post('/api/basket/addProduct/', async (req, res) => {
+    const {product_id, count} = req.body;
+    console.log(product_id)
+    console.log(count)
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await addProductToBasket(user.id, product_id, count);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function addProductToBasket(userId, productId, count) {
+
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('INSERT INTO basket_products (user_id, product_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?',
+            [userId, productId, count, count], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({message: 'Product added to basket successfully'});
+            }
+        });
+    });
+}
+
+app.post('/api/basket/deleteProduct/', async (req, res) => {
+    const {product_id} = req.body;
+    console.log(product_id)
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await removeProductFromBasket(user.id, product_id);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function removeProductFromBasket(userId, productId) {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('DELETE FROM basket_products WHERE user_id = ? AND product_id = ?', [userId, productId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({message: 'Product removed from basket successfully'});
+            }
+        });
+    });
+
 }
 
 app.get('/api/catalog/getSearchProducts/', async (req, res) => {

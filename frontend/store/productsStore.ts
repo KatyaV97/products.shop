@@ -98,22 +98,37 @@ export const useProductsStore = defineStore('productsStore', {
             localStorage.setItem('basket ' + product.id + ' ' + product.title, JSON.stringify(product))
 
             if (typeof this.getCookie('userId') !== 'undefined') {
-                await useFetch('api/basket/addProduct', product)
+                const {data: response} = await useFetch('/api/basket/addProduct', {
+                    query: {
+                        product_id: product.id,
+                        count: product.count
+                    }
+                })
+                console.log(response)
             }
         },
         async saveProductFromFavorite(product) {
             localStorage.setItem('favorite ' + product.id + ' ' + product.title, JSON.stringify(product))
 
             if (typeof this.getCookie('userId') !== 'undefined') {
-                await useFetch('api/favorite/addProduct', product)
+                const {data: response} = await useFetch('/api/favorites/addProduct', {
+                    product_id: product.id
+                })
             }
         },
         async deleteProductFromBasketInStore(product) {
             if (localStorage.getItem('basket ' + product.id + ' ' + product.title) !== null) {
                 localStorage.removeItem('basket ' + product.id + ' ' + product.title)
             }
+            console.log(111)
             if (typeof this.getCookie('userId') !== 'undefined') {
-                await useFetch('api/basket/deleteProduct', product)
+                const {data: response} = await useFetch('/api/basket/deleteProduct', {
+                    query: {
+                        product_id: product.id,
+                        count: product.count
+                    }
+                })
+                console.log(response)
             }
         },
         async deleteProductFromFavoriteInStore(product) {
@@ -121,7 +136,11 @@ export const useProductsStore = defineStore('productsStore', {
                 localStorage.removeItem('favorite ' + product.id + ' ' + product.title)
             }
             if (typeof this.getCookie('userId') !== 'undefined') {
-                await useFetch('api/favorite/deleteProduct', product)
+                const {data: response} = await useFetch('/api/favorites/deleteProduct', {
+                    query: {
+                        product_id: product.id
+                    }
+                })
             }
         },
         getCookie(name) {
@@ -158,30 +177,36 @@ export const useProductsStore = defineStore('productsStore', {
                     }
                 }
             }
+        },
 
+        async initFromDB() {
             if (typeof this.getCookie('userId') !== 'undefined') {
                 const [{data: basketProducts}, {data: favoriteProducts}] = await Promise.all(
-                    useFetch('api/basket/getProducts'), useFetch('api/favorite/getProducts'))
+                    useFetch('api/basket/getProducts'), useFetch('/api/favorites/getFavorites'))
 
                 const basketProductsFromBD = basketProducts.value
                 const favoriteProductsFromBD = favoriteProducts.value
 
-                basketProductsFromBD.forEach(product => {
-                    if (!this.productsInBasket.find(item => item.id === product.id)) {
-                        this.productsInBasket.push(product)
-                    }
-                })
+                if (basketProductsFromBD && basketProductsFromBD.length > 0) {
+                    basketProductsFromBD.forEach(product => {
+                        if (!this.productsInBasket.find(item => item.id === product.id)) {
+                            this.productsInBasket.push(product)
+                        }
+                    })
+                }
 
-                favoriteProductsFromBD.forEach(product => {
-                    if (!this.productsInFavorite.find(item => item.id === product.id)) {
-                        this.productsInFavorite.push(product)
-                    }
-                })
+                if (favoriteProductsFromBD && favoriteProductsFromBD.length > 0) {
+                    favoriteProductsFromBD.forEach(product => {
+                        if (!this.productsInFavorite.find(item => item.id === product.id)) {
+                            this.productsInFavorite.push(product)
+                        }
+                    })
+                }
             }
         },
 
         async initSearch(placeholder) {
-            const {data} = await useFetch('api/catalog/getSearchValue', {
+            const {data} = await useFetch('/api/catalog/getSearchValue', {
                     query: placeholder
                 }
             )

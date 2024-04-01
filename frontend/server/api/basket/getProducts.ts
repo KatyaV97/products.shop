@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
 
     try {
-        return await useCustomFetch(`${BASKET}/getProducts/${params.user_id}`,
+        return await useCustomFetch(`${BASKET}/getProducts/`,
             event,
             {
                 method: 'GET',
