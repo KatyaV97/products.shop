@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     logOut() {
-      this.authUserStore.logOut
+      this.authUserStore.logOut()
       navigateTo('/auth', {
         external: true
       })

@@ -64,7 +64,7 @@ export const useProductsStore = defineStore('productsStore', {
                     return product.id === selectedProduct.id
                 })
                 if (index !== -1) {
-                    this.productsInBasket[index].count = count
+                    this.productsInBasket[index].count += count
                     return
                 }
             }
@@ -171,39 +171,43 @@ export const useProductsStore = defineStore('productsStore', {
                         this.productsInBasket.push(product)
                     }
                 }
-                if (key.includes('favorite')) {
-                    if (!this.productsInFavorite.find(item => item.id === product.id)) {
-                        this.productsInFavorite.push(product)
-                    }
-                }
+                /* if (key.includes('favorite')) {
+                     if (!this.productsInFavorite.find(item => item.id === product.id)) {
+                         this.productsInFavorite.push(product)
+                     }
+                 }*/
             }
         },
 
         async initFromDB() {
             if (typeof this.getCookie('userId') !== 'undefined') {
-                const [{data: basketProducts}, {data: favoriteProducts}] = await Promise.all(
-                    useFetch('api/basket/getProducts'), useFetch('/api/favorites/getFavorites'))
+                const [{data: basketProducts}/*, {data: favoriteProducts}*/] = await Promise.all([
+                    useFetch('api/basket/getProducts')/*, useFetch('/api/favorites/getFavorites')*/])
 
                 const basketProductsFromBD = basketProducts.value
-                const favoriteProductsFromBD = favoriteProducts.value
-
+                //const favoriteProductsFromBD = favoriteProducts.value
+                console.log(basketProductsFromBD)
                 if (basketProductsFromBD && basketProductsFromBD.length > 0) {
-                    basketProductsFromBD.forEach(product => {
+                        basketProductsFromBD.forEach(product => {
                         if (!this.productsInBasket.find(item => item.id === product.id)) {
-                            this.productsInBasket.push(product)
+                            this.productsInBasket.push({
+                                ...product,
+                                count: product.quantity
+                            })
                         }
                     })
                 }
-
-                if (favoriteProductsFromBD && favoriteProductsFromBD.length > 0) {
+                console.log(this.productsInBasket)
+                /*if (favoriteProductsFromBD && favoriteProductsFromBD.length > 0) {
                     favoriteProductsFromBD.forEach(product => {
                         if (!this.productsInFavorite.find(item => item.id === product.id)) {
                             this.productsInFavorite.push(product)
                         }
                     })
-                }
+                }*/
             }
-        },
+        }
+        ,
 
         async initSearch(placeholder) {
             const {data} = await useFetch('/api/catalog/getSearchValue', {

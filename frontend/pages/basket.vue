@@ -158,18 +158,26 @@ export default {
   },
   mounted() {
     this.productsStore.initFromStore()
+    this.productsStore.initFromDB()
   },
   methods: {
     getAlertFocusStatus(status: boolean): boolean {
       return this.alert.focus = status
     },
     decrease(cardInfo): void {
-      this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
-      this.productsStore.deleteProductFromBasketInStore({...cardInfo.cardInfo, count: cardInfo.count})
+      console.log(cardInfo)
+      console.log(cardInfo.cardInfo.count === 1)
+      if (cardInfo.cardInfo.count  === 1) {
+        this.productsStore.deleteProductFromBasket(cardInfo.cardInfo)
+        this.productsStore.deleteProductFromBasketInStore(cardInfo.cardInfo)
+        return
+      }
+      this.productsStore.addProductsInBasket(cardInfo.cardInfo, -1)
+      this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: -1})
     },
     increase(cardInfo): void {
-      this.productsStore.addProductsInBasket(cardInfo.cardInfo, cardInfo.count)
-      this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: cardInfo.count})
+      this.productsStore.addProductsInBasket(cardInfo.cardInfo, 1)
+      this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: 1})
     },
     setValue(key: string, value: string): void {
       if (key === 'phoneNumber' && value.length > 16) return

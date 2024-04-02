@@ -8,7 +8,7 @@
     />
     <p class="_non-space title">{{ cardInfo.title }}</p>
     <Toggle
-        :count-product="cardInfo.count.toString()"
+        :count-product="cardInfo?.count.toString() ? cardInfo.count.toString() : '0'"
         :min="0"
         @increase="increase"
         @decrease="decrease"

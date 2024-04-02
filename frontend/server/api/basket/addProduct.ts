@@ -8,11 +8,13 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
+    const cookie = parseCookies(event)
     console.log(params)
     try {
-        return await useCustomFetch(`${BASKET}/addProduct`,
-            event,
-            {
+        return await $fetch(`${BASKET}/addProduct`, {
+                headers: {
+                    'Authorization': `Bearer ${cookie.access}`
+                },
                 method: 'POST',
                 body: {
                     product_id: params.product_id,

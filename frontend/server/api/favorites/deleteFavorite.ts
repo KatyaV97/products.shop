@@ -8,11 +8,13 @@ import {FAVORITES} from "~/server/api/constants/urls"
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
+    const cookie = parseCookies(event)
 
     try {
-        return await useCustomFetch(`${FAVORITES}/deleteFavorite`,
-            event,
-            {
+        return await $fetch(`${FAVORITES}/deleteFavorite`, {
+                headers: {
+                    'Authorization': `Bearer ${cookie.access}`
+                },
                 method: 'DELETE',
                 body: {
                     product_id: params.product_id,

@@ -68,13 +68,13 @@ app.post('/api/auth/login/', async (req, res) => {
 
 async function saveRefreshToken(userId, refreshToken) {
     return new Promise((resolve, reject) => {
-        connection.query('INSERT INTO user_tokens (user_id, refresh_token) VALUES (?, ?)', [userId, refreshToken], (error, results) => {
+        /*connection.query('INSERT INTO user_tokens (user_id, refresh_token) VALUES (?, ?)', [userId, refreshToken], (error, results) => {
             if (error) {
                 reject(error);
             } else {
                 resolve({message: 'Refresh token saved successfully'});
             }
-        });
+        });*/
     });
 }
 
@@ -347,6 +347,7 @@ async function createTask(products, name, phoneNumber, email) {
 
 app.get('/api/basket/getProducts/', async (req, res) => {
     const authHeader = req.headers.authorization
+    console.log(authHeader)
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
         // Now you can use the token
@@ -356,6 +357,7 @@ app.get('/api/basket/getProducts/', async (req, res) => {
                 return res.sendStatus(403);
             }
             try {
+                console.log(user)
                 const response = await fetchProductsByIds(user.id);
                 res.json(response);
             } catch (exception) {
@@ -374,7 +376,7 @@ app.get('/api/basket/getProducts/', async (req, res) => {
 async function fetchProductsByIds(userId) {
     return new Promise((resolve, reject) => {
         // Query the database
-        connection.query('SELECT * FROM basket_products WHERE user_id = ?', [userId], (error, results) => {
+        connection.query( 'SELECT p.*, bp.quantity FROM basket_products bp JOIN products p ON bp.product_id = p.id WHERE bp.user_id = ?', [userId], (error, results) => {
             if (error) {
                 reject(error);
             } else {
@@ -428,7 +430,7 @@ async function addProductToBasket(userId, productId, count) {
     });
 }
 
-app.post('/api/basket/deleteProduct/', async (req, res) => {
+app.delete('/api/basket/deleteProduct/', async (req, res) => {
     const {product_id} = req.body;
     console.log(product_id)
     const authHeader = req.headers.authorization

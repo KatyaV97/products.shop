@@ -8,11 +8,13 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
+    const cookie = parseCookies(event)
 
     try {
-        return await useCustomFetch(`${BASKET}/deleteProduct`,
-            event,
-            {
+        return await $fetch(`${BASKET}/deleteProduct`, {
+                headers: {
+                    'Authorization': `Bearer ${cookie.access}`
+                },
                 method: 'DELETE',
                 body: {
                     product_id: params.product_id,

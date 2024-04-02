@@ -7,14 +7,16 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  * Получение товаров из корзины
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
-    const params = getQuery(event)
-
+    const cookie =  parseCookies(event)
+    console.log(cookie.access)
     try {
-        return await useCustomFetch(`${BASKET}/getProducts/`,
-            event,
+        return await $fetch(`${BASKET}/getProducts/`,
             {
+                headers: {
+                    'Authorization': `Bearer ${cookie.access}`
+                },
                 method: 'GET',
-            }
+            },
         )
     } catch (exception) {
         return {
