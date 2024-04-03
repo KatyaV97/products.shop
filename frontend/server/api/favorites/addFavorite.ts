@@ -9,6 +9,7 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
     const cookie = parseCookies(event)
+    console.log(params)
     try {
         return await $fetch(`${FAVORITES}/addFavorite`, {
                 headers: {
@@ -17,7 +18,6 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
                 method: 'POST',
                 body: {
                     product_id: params.product_id,
-                    user_id: params.user_id,
                 }
             }
         )

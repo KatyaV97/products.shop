@@ -11,7 +11,7 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
     const cookie = parseCookies(event)
 
     try {
-        return await $fetch(`${FAVORITES}/getFavorites/${cookie.userId}`, {
+        return await $fetch(`${FAVORITES}/getFavorites`, {
                 headers: {
                     'Authorization': `Bearer ${cookie.access}`
                 },

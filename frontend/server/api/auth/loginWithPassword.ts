@@ -10,6 +10,7 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
     let myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Accept', 'application/json');
+    console.log(11)
     try {
         return await $fetch(`${AUTH}/login`,
             {

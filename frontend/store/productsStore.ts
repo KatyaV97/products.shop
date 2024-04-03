@@ -107,12 +107,39 @@ export const useProductsStore = defineStore('productsStore', {
                 console.log(response)
             }
         },
+
+        async saveAllProductsFromBasket() {
+            if (this.productsInBasket && this.productsInBasket.length > 0) {
+                this.productsInBasket.forEach(product => {
+                    const {data: response} = useFetch('/api/basket/addProduct', {
+                        query: {
+                            product_id: product.id
+                        }
+                    })
+                })
+            }
+        },
+
+        async saveAllProductsFromFavorites() {
+            if (this.productsInFavorite && this.productsInFavorite.length > 0) {
+                this.productsInFavorite.forEach(product => {
+                    const {data: response} = useFetch('/api/favorites/addProduct', {
+                        query: {
+                            product_id: product.id
+                        }
+                    })
+                })
+            }
+        },
+
         async saveProductFromFavorite(product) {
             localStorage.setItem('favorite ' + product.id + ' ' + product.title, JSON.stringify(product))
 
             if (typeof this.getCookie('userId') !== 'undefined') {
-                const {data: response} = await useFetch('/api/favorites/addProduct', {
-                    product_id: product.id
+                const {data: response} = await useFetch('/api/favorites/addFavorite', {
+                    query: {
+                        product_id: product.id
+                    }
                 })
             }
         },
@@ -120,7 +147,6 @@ export const useProductsStore = defineStore('productsStore', {
             if (localStorage.getItem('basket ' + product.id + ' ' + product.title) !== null) {
                 localStorage.removeItem('basket ' + product.id + ' ' + product.title)
             }
-            console.log(111)
             if (typeof this.getCookie('userId') !== 'undefined') {
                 const {data: response} = await useFetch('/api/basket/deleteProduct', {
                     query: {
@@ -128,7 +154,6 @@ export const useProductsStore = defineStore('productsStore', {
                         count: product.count
                     }
                 })
-                console.log(response)
             }
         },
         async deleteProductFromFavoriteInStore(product) {
@@ -136,7 +161,7 @@ export const useProductsStore = defineStore('productsStore', {
                 localStorage.removeItem('favorite ' + product.id + ' ' + product.title)
             }
             if (typeof this.getCookie('userId') !== 'undefined') {
-                const {data: response} = await useFetch('/api/favorites/deleteProduct', {
+                const {data: response} = await useFetch('/api/favorites/deleteFavorite', {
                     query: {
                         product_id: product.id
                     }
@@ -171,50 +196,56 @@ export const useProductsStore = defineStore('productsStore', {
                         this.productsInBasket.push(product)
                     }
                 }
-                /* if (key.includes('favorite')) {
-                     if (!this.productsInFavorite.find(item => item.id === product.id)) {
-                         this.productsInFavorite.push(product)
-                     }
-                 }*/
+                if (key.includes('favorite')) {
+                    if (!this.productsInFavorite.find(item => item.id === product.id)) {
+                        this.productsInFavorite.push(product)
+                    }
+                }
             }
         },
 
         async initFromDB() {
             if (typeof this.getCookie('userId') !== 'undefined') {
-                const [{data: basketProducts}/*, {data: favoriteProducts}*/] = await Promise.all([
-                    useFetch('api/basket/getProducts')/*, useFetch('/api/favorites/getFavorites')*/])
+                const [{data: basketProducts}, {data: favoriteProducts}] = await Promise.all([
+                    useFetch('api/basket/getProducts'), useFetch('/api/favorites/getFavorites')])
 
                 const basketProductsFromBD = basketProducts.value
-                //const favoriteProductsFromBD = favoriteProducts.value
-                console.log(basketProductsFromBD)
+                const favoriteProductsFromBD = favoriteProducts.value
+
                 if (basketProductsFromBD && basketProductsFromBD.length > 0) {
-                        basketProductsFromBD.forEach(product => {
+                    basketProductsFromBD.forEach(product => {
                         if (!this.productsInBasket.find(item => item.id === product.id)) {
+                            console.log(product)
                             this.productsInBasket.push({
                                 ...product,
                                 count: product.quantity
                             })
+                            localStorage.setItem('basket ' + product.id + ' ' + product.title, JSON.stringify({
+                                ...product,
+                                count: product.quantity
+                            }))
                         }
                     })
                 }
-                console.log(this.productsInBasket)
-                /*if (favoriteProductsFromBD && favoriteProductsFromBD.length > 0) {
+
+                if (favoriteProductsFromBD && favoriteProductsFromBD.length > 0) {
                     favoriteProductsFromBD.forEach(product => {
                         if (!this.productsInFavorite.find(item => item.id === product.id)) {
                             this.productsInFavorite.push(product)
+                            localStorage.setItem('favorite ' + product.id + ' ' + product.title, JSON.stringify(product))
                         }
                     })
-                }*/
+                }
+                console.log(favoriteProductsFromBD)
+                console.log(this.productsInFavorite)
             }
-        }
-        ,
+        },
 
         async initSearch(placeholder) {
             const {data} = await useFetch('/api/catalog/getSearchValue', {
                     query: placeholder
                 }
             )
-            this.productsSearch = data.value
         }
     }
 })

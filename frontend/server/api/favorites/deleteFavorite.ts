@@ -18,7 +18,6 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
                 method: 'DELETE',
                 body: {
                     product_id: params.product_id,
-                    user_id: params.user_id,
                 }
             }
         )

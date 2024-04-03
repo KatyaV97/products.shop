@@ -43,14 +43,12 @@ function generateTokens(payload) {
  */
 app.post('/api/auth/login/', async (req, res) => {
     const params = req.body;
-
+    console.log(11)
     try {
         const response = await fetchFromDatabase(params);
         if (response) {
             const user = {id: response.id, name: response.name};
             const tokens = generateTokens(user);
-
-            await saveRefreshToken(user.id, tokens.refreshToken);
 
             res.json({
                 ...response,
@@ -65,18 +63,6 @@ app.post('/api/auth/login/', async (req, res) => {
         });
     }
 });
-
-async function saveRefreshToken(userId, refreshToken) {
-    return new Promise((resolve, reject) => {
-        /*connection.query('INSERT INTO user_tokens (user_id, refresh_token) VALUES (?, ?)', [userId, refreshToken], (error, results) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve({message: 'Refresh token saved successfully'});
-            }
-        });*/
-    });
-}
 
 connection.connect((err) => {
     if (err) throw err;
@@ -347,7 +333,6 @@ async function createTask(products, name, phoneNumber, email) {
 
 app.get('/api/basket/getProducts/', async (req, res) => {
     const authHeader = req.headers.authorization
-    console.log(authHeader)
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
         // Now you can use the token
@@ -357,7 +342,6 @@ app.get('/api/basket/getProducts/', async (req, res) => {
                 return res.sendStatus(403);
             }
             try {
-                console.log(user)
                 const response = await fetchProductsByIds(user.id);
                 res.json(response);
             } catch (exception) {
@@ -388,8 +372,6 @@ async function fetchProductsByIds(userId) {
 
 app.post('/api/basket/addProduct/', async (req, res) => {
     const {product_id, count} = req.body;
-    console.log(product_id)
-    console.log(count)
     const authHeader = req.headers.authorization
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
@@ -416,7 +398,6 @@ app.post('/api/basket/addProduct/', async (req, res) => {
 });
 
 async function addProductToBasket(userId, productId, count) {
-
     return new Promise((resolve, reject) => {
         // Query the database
         connection.query('INSERT INTO basket_products (user_id, product_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + ?',
@@ -485,6 +466,129 @@ app.get('/api/catalog/getSearchProducts/', async (req, res) => {
         });
     }
 });
+
+app.get('/api/favorites/getFavorites/', async (req, res) => {
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await fetchFavoritesProductsByIds(user.id);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function fetchFavoritesProductsByIds(userId){
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query( 'SELECT p.* FROM favorite_products bp JOIN products p ON bp.product_id = p.id WHERE bp.user_id = ?', [userId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
+app.post('/api/favorites/addFavorite/', async (req, res) => {
+    const {product_id} = req.body;
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+        console.log(product_id)
+        console.log(authHeader)
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await addFavoriteProductToDB(user.id, product_id);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function addFavoriteProductToDB(userId, productId) {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('INSERT INTO favorite_products (user_id, product_id) VALUES (?, ?)',
+            [userId, productId], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve({message: 'Product added to DB successfully'});
+                }
+            });
+    });
+}
+
+app.delete('/api/favorites/deleteFavorite/', async (req, res) => {
+    const {product_id} = req.body;
+    console.log(product_id)
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer <token>
+        // Now you can use the token
+
+        jwt.verify(token, accessTokenSecret, async (err, user) => {
+            if (err) {
+                return res.sendStatus(403);
+            }
+            try {
+                const response = await removeFavoriteProductFromDB(user.id, product_id);
+                res.json(response);
+            } catch (exception) {
+                res.status(500).json({
+                    error: true,
+                    code: exception.code,
+                    message: exception.message
+                });
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+async function removeFavoriteProductFromDB(userId, productId) {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('DELETE FROM favorite_products WHERE user_id = ? AND product_id = ?', [userId, productId], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({message: 'Product removed from DB successfully'});
+            }
+        });
+    });
+}
 
 async function fetchProductsByPrompt(prompt) {
     return new Promise((resolve, reject) => {

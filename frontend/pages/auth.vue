@@ -38,7 +38,8 @@
                   class="main-input"
                   :placeholder="'Email'"
                   :value="userInput.email"
-                  @focus="clearError"
+                  @paste="setValue('email', $event.target.value)"
+                  @focus="clearError; verifyInputs()"
                   @input="setValue('email', $event.target.value)"
               />
             </div>
@@ -47,7 +48,8 @@
                 :placeholder="'Password'"
                 type="password"
                 :value="userInput.password"
-                @focus="clearError"
+                @paste="setValue('password', $event.target.value)"
+                @focus="clearError; verifyInputs()"
                 @input="setValue('password', $event.target.value)"
             />
             <p class="_non-space register"
@@ -76,7 +78,8 @@
                   class="main-input"
                   :placeholder="'Имя пользователя'"
                   :value="userInput.name"
-                  @focus="clearError"
+                  @paste="setValue('name', $event.target.value)"
+                  @focus="clearError(); verifyInputs()"
                   @input="setValue('name', $event.target.value)"
               />
             </div>
@@ -84,7 +87,8 @@
                 class="main-input"
                 :placeholder="'Email'"
                 :value="userInput.email"
-                @focus="clearError"
+                @paste="setValue('email', $event.target.value)"
+                @focus="clearError; verifyInputs()"
                 @input="setValue('email', $event.target.value)"
             />
             <input
@@ -92,7 +96,8 @@
                 :placeholder="'Password'"
                 type="password"
                 :value="userInput.password"
-                @focus="clearError"
+                @paste="setValue('password', $event.target.value)"
+                @focus="clearError; verifyInputs()"
                 @input="setValue('password', $event.target.value)"
             />
             <MainButton
@@ -153,8 +158,8 @@ export default {
       this.userInput.isValid = true
     },
     setValue(key, value) {
-      this.verifyInputs()
       this.userInput[key] = value
+      this.verifyInputs()
     },
     isValidEmail(newMail) {
       const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
@@ -217,11 +222,12 @@ export default {
         this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
-        this.productsStore.initFromDB()
+
+        await this.productsStore.saveAllProductsFromBasket()
+        await this.productsStore.initFromDB()
         await navigateTo('/settings', {
           external: true
         })
-
       }
 
     }
