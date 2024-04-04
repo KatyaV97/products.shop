@@ -199,7 +199,10 @@ export default {
         this.authUserStore.setUserId(this.data.id)
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
-        this.productsStore.initFromDB()
+
+        await this.productsStore.saveAllProductsFromBasket()
+        await this.productsStore.saveAllProductsFromFavorites()
+        await this.productsStore.initFromDB()
         await navigateTo('/', {
           external: true
         })
@@ -224,6 +227,7 @@ export default {
         this.authUserStore.setRefreshToken(this.data.refreshToken)
 
         await this.productsStore.saveAllProductsFromBasket()
+        await this.productsStore.saveAllProductsFromFavorites()
         await this.productsStore.initFromDB()
         await navigateTo('/settings', {
           external: true

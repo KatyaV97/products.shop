@@ -123,7 +123,7 @@ export const useProductsStore = defineStore('productsStore', {
         async saveAllProductsFromFavorites() {
             if (this.productsInFavorite && this.productsInFavorite.length > 0) {
                 this.productsInFavorite.forEach(product => {
-                    const {data: response} = useFetch('/api/favorites/addProduct', {
+                    const {data: response} = useFetch('/api/favorites/addFavorite', {
                         query: {
                             product_id: product.id
                         }
