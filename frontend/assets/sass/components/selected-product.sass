@@ -71,3 +71,61 @@
     .card-container
       padding: 0
       margin-bottom: 150px
+
+
+@media only screen and (max-width: 1440.98px)
+
+  .selected-product-container
+    gap: 50px
+
+    .selected-product-block
+      width: 100%
+      padding: 60px
+
+      .left-side
+        width: 300px
+        height: 320px
+
+        img
+          width: 300px
+          height: 320px
+
+      .right-side
+        height: 320px
+
+
+@media only screen and (max-width: 1024.98px)
+
+  .selected-product-container
+    gap: 20px
+
+    .selected-product-block
+      width: 100%
+      padding: 40px
+
+      .left-side
+        width: 100px
+        height: 120px
+
+        img
+          width: 100px
+          height: 120px
+
+      .right-side
+        height: 120px
+
+
+@media only screen and (max-width: 991.98px)
+
+  .selected-product-container
+    .selected-product-block
+      flex-direction: column
+
+      .right-side
+        .buy-block
+          display: flex
+          gap: 15px
+          .heart
+            svg
+              width: 25px
+              height: 18px

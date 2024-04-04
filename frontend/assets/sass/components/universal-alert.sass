@@ -1,0 +1,85 @@
+.universal-alert
+  position: fixed
+  top: $step * 14
+  left: 50%
+  margin-right: -50%
+  transform: translate(-50%, 0)
+  z-index: 10
+  max-width: $step * 150
+  gap: $step * 2
+  background: $negative
+  display: flex
+  flex-direction: row
+  justify-content: center
+  border-radius: $big-radius
+  color: $white-neutral-0
+  box-shadow: 0 6px 32px 0 rgba(0, 0, 0, 0.08)
+  padding: $step * 4
+  cursor: default
+
+  .link-alert
+    color: $white-neutral-0
+    font-family: $Stolzl-Medium, sans-serif
+    font-weight: 500
+
+  &._hidden
+    display: none
+    pointer-events: none
+
+  &._show
+    display: flex
+    align-items: center
+    justify-content: center
+    animation: down-alerts-on 0.6s ease-in-out
+    transform: translate(-50%, 0)
+    pointer-events: auto
+
+  &._done
+    display: flex
+    align-items: center
+    justify-content: center
+    animation: down-alerts-off 0.6s ease-in-out
+    animation-fill-mode: forwards
+    pointer-events: none
+
+  .alert-message
+    max-width: 430px
+    @include direction-column
+    flex: 1 0 0
+    @include default-body-text
+
+  .alert-action
+    padding: 0 $step * 3
+    @include direction-column
+    align-items: flex-start
+    align-self: stretch
+
+  .alert-close
+    @include direction-column
+    justify-content: flex-start
+    align-self: flex-start
+    cursor: pointer
+
+    svg
+      width: $step * 6
+      height: $step * 6
+
+
+@media only screen and (max-width: 991.98px)
+
+  .universal-alert
+    width: calc(100% - $step * 8)
+
+
+@media only screen and (max-width: 575.98px)
+
+  .universal-alert
+    width: max-content
+    max-width: calc(100% - $step * 8)
+    height: max-content
+    top: 24px
+    min-height: $step * 11
+    padding: $step * 3
+
+    .alert-message
+      @include default-small-text

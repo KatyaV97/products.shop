@@ -41,3 +41,14 @@
     animation: down-alerts-off 0.6s ease-in-out
     animation-fill-mode: forwards
     pointer-events: none
+
+@media only screen and (max-width: 575.98px)
+
+  .alert
+    width: max-content
+    max-width: calc(100% - $step * 8)
+    height: max-content
+    top: 24px
+    @include default-small-text
+    min-height: $step * 11
+    padding: $step * 3
