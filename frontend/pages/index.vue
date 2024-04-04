@@ -4,6 +4,12 @@
       {{ pageTitle }}
     </Title>
   </Head>
+  <UniversalAlert
+      :isError="errorAlert.show"
+      :value="errorAlert.text"
+      :url="errorAlert.url"
+      @close-alert="toggleErrorAlert($event,'','')"
+  />
   <MainContainer
       :has-img="true"
   >
@@ -67,6 +73,11 @@ export default {
   data() {
     return {
       pageTitle: 'Night store. Главная' as string,
+      errorAlert: {
+        show: false,
+        text: '',
+        url: ''
+      }
     }
   },
   async setup() {
@@ -85,10 +96,26 @@ export default {
     }
   },
   methods: {
+    errorHandler(response: object): boolean {
+      if (response?.error && response.error) {
+        this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
+        return true
+      }
+      return false
+    },
+    toggleErrorAlert(show: boolean, text: string, url: string): void {
+      this.errorAlert.show = show
+      this.errorAlert.text = text
+      this.errorAlert.url = url
+    },
     moveToCatalog(card) {
       this.productsStore.setActiveCategory(card.category_id)
       this.$router.push('/products')
     }
+  },
+  mounted() {
+    this.errorHandler(this.popularCategories)
+    this.errorHandler(this.popularProducts)
   }
 }
 </script>

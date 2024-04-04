@@ -4,6 +4,14 @@
       {{ pageTitle }}
     </Title>
   </Head>
+
+  <UniversalAlert
+      :isError="errorAlert.show"
+      :value="errorAlert.text"
+      :url="errorAlert.url"
+      @close-alert="toggleErrorAlert($event,'','')"
+  />
+
   <MainContainer
       :has-img="false"
   >
@@ -130,6 +138,11 @@ export default {
         title: 'Цены: по возрастанию'
       },
       filteredProducts: [],
+      errorAlert: {
+        show: false,
+        text: '',
+        url: ''
+      }
     }
   },
   async setup() {
@@ -157,16 +170,29 @@ export default {
     }
   },
   mounted() {
-    if (this.categories && this.categories.length > 0) {
+    if (!this.errorHandler(this.categories) && this.categories && this.categories.length > 0) {
       this.categories.forEach(category => {
         category.isActive = category.id === this.selectedCategory
       })
     }
+    this.errorHandler(this.products)
     this.filterProductsByLength(10)
     this.sortProducts()
     this.isLoading = false
   },
   methods: {
+    errorHandler(response: object): boolean {
+      if (response?.error && response.error) {
+        this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
+        return true
+      }
+      return false
+    },
+    toggleErrorAlert(show: boolean, text: string, url: string): void {
+      this.errorAlert.show = show
+      this.errorAlert.text = text
+      this.errorAlert.url = url
+    },
     setMinMax(range) {
       this.priceRange.min = range.leftValue
       this.priceRange.max = range.rightValue

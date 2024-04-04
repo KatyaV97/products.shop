@@ -4,6 +4,14 @@
       {{ pageTitle }}
     </Title>
   </Head>
+
+  <UniversalAlert
+      :isError="errorAlert.show"
+      :value="errorAlert.text"
+      :url="errorAlert.url"
+      @close-alert="toggleErrorAlert($event,'','')"
+  />
+
   <MainContainer
       :has-img="false"
   >
@@ -120,6 +128,11 @@ export default {
       pageTitle: 'Night store',
       count: 1,
       priceResult: 0,
+      errorAlert: {
+        show: false,
+        text: '',
+        url: ''
+      }
     }
   },
   async setup() {
@@ -152,11 +165,25 @@ export default {
     }
   },
   mounted() {
-    this.productsStore.initFromStore()
-    this.checkProductInBasket()
-    this.checkProductInFavorite()
+    if (!this.errorHandler(this.product)) {
+      this.productsStore.initFromStore()
+      this.checkProductInBasket()
+      this.checkProductInFavorite()
+    }
   },
   methods: {
+    errorHandler(response: object): boolean {
+      if (response?.error && response.error) {
+        this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
+        return true
+      }
+      return false
+    },
+    toggleErrorAlert(show: boolean, text: string, url: string): void {
+      this.errorAlert.show = show
+      this.errorAlert.text = text
+      this.errorAlert.url = url
+    },
     addToBasket() {
       this.productsStore.addProductsInBasket(this.product, this.count)
       this.productsStore.saveProductFromBasket({...this.product, count: this.count})

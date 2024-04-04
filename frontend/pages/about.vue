@@ -45,9 +45,15 @@
           <h3 class="_non-space social-media-text">Мы в соц.сетях</h3>
           <div class="social-media">
             <div class="for-border">
-              <div class="tg"></div>
-              <div class="tg"></div>
-              <div class="tg"></div>
+              <div class="tg">
+                <img src="/icon-telegram.png" alt="Иконка телеграмма"/>
+              </div>
+              <div class="tg">
+                <img src="/icon-whatsapp.png" alt="Иконка whatsapp"/>
+              </div>
+              <div class="tg">
+                <img src="/icon-inst.png" alt="Иконка инстаграмма"/>
+              </div>
             </div>
           </div>
         </div>
