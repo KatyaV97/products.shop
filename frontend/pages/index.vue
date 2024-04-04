@@ -97,7 +97,8 @@ export default {
   },
   methods: {
     errorHandler(response: object): boolean {
-      if (response?.error && response.error) {
+      console.log(response)
+      if (!response || response?.error && response.error) {
         this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
         return true
       }

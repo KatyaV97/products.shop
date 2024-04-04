@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
       :to="`/products/${cardInfo.id}`"
-      class="custom-link"
+      class="custom-link product-card"
   >
     <div class="product-card-container">
       <div class="top">

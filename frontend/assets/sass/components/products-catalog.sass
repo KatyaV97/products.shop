@@ -117,9 +117,39 @@
       gap: 40px
       padding: 30px 40px
 
-    .right-side,
-    .left-side
-      width: 100%
+      .left-side
+        flex-direction: row-reverse
+        justify-content: space-between
+        gap: 40px
+
+        .line
+          display: none
+
+      .right-side,
+      .left-side
+        width: 100%
+
+      .right-side
+        justify-content: space-between
+
+        .products-list-block
+          justify-content: space-between
+          width: 100%
+          flex-direction: row
+          gap: 20px
 
 
 @media only screen and (max-width: 575.98px)
+
+  .catalog-container
+    .catalog-block
+      .left-side
+        flex-direction: column
+
+      .right-side
+        .sort-block
+          width: 200px
+
+        .products-list-block
+          align-items: center
+          justify-content: center

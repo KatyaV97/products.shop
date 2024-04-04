@@ -112,7 +112,6 @@
       @include default-mega-paragraph
       font-weight: 700
 
-
       .result-text
         color: #FFFFFF
 
@@ -156,6 +155,22 @@
     width: 100%
     padding: 60px
 
+    .request-block
+      margin: 50px 0 200px 0
+      height: 350px
+      padding: 20px
+      gap: 20px
+
+    .info-block
+      width: 20%
+
+    .result-block
+      width: 43%
+      gap: 20px
+
+      .result
+        @include default-mega-paragraph
+
 
 @media only screen and (max-width: 1024.98px)
 
@@ -164,9 +179,25 @@
 
     .request-block
       margin: 50px 0 200px 0
-      height: 250px
+      height: 350px
       padding: 20px
       gap: 20px
+
+    .info-block
+      width: 33%
+
+    .result-block
+      width: 33%
+
+      .result
+        font-size: 18px
+        flex-direction: column
+        justify-content: flex-start
+        align-items: flex-start
+        gap: 10px
+
+        .text-center
+          text-align: left
 
   .empty-block
     padding:  30px 30px 50px
@@ -176,12 +207,18 @@
       width: 100px
       height: 32px
 
-
-@media only screen and (max-width: 575.98px)
+@media only screen and (max-width: 791.98px)
 
   .basket-block
+    margin-top: 30px
+    gap: 10px
+
+    .table-header
+      display: none
+
     .request-block
       flex-direction: column
+      height: 100%
 
       .inputs-block
         width: 100%
@@ -194,3 +231,14 @@
 
     .result-block
       padding: 10px 15px
+
+      .result
+        @include default-mega-paragraph
+        font-size: 18px
+        flex-direction: row
+        justify-content: space-between
+        align-items: flex-start
+        gap: 10px
+
+        .text-center
+          text-align: center

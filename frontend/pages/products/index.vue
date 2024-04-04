@@ -36,7 +36,7 @@
                 >Фильтровать</p>
               </div>
             </div>
-            <div class="line"></div>
+            <div class="line "></div>
             <div class="categories-title">
               <p class="_non-space title">КАТЕГОРИИ ТОВАРОВ</p>
               <div class="categories"
@@ -175,14 +175,16 @@ export default {
         category.isActive = category.id === this.selectedCategory
       })
     }
-    this.errorHandler(this.products)
-    this.filterProductsByLength(10)
-    this.sortProducts()
+    if (!this.errorHandler(this.products)){
+      this.filterProductsByLength(10)
+      this.sortProducts()
+    }
+
     this.isLoading = false
   },
   methods: {
     errorHandler(response: object): boolean {
-      if (response?.error && response.error) {
+      if (!response || response?.error && response.error) {
         this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
         return true
       }

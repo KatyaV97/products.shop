@@ -246,6 +246,8 @@ export const useProductsStore = defineStore('productsStore', {
                     query: placeholder
                 }
             )
+
+            this.setProductsSearch(data.value)
         }
     }
 })

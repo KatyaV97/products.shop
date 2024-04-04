@@ -70,16 +70,24 @@
 
   .settings-container
     .settings-block
+      flex-direction: column
       padding: 40px
-      gap: 40px
+      gap: 0
 
       .left-side,
       .right-side
-        padding: 50px 25px
+        padding: 15px 25px
+        width: 100%
+
+      .left-side
+        border-right: none
+        gap: 10px
 
 
 @media only screen and (max-width: 991.98px)
 
   .settings-container
+    justify-content: flex-start
+
     .settings-block
       flex-direction: column
