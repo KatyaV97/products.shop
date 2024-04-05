@@ -604,6 +604,55 @@ async function fetchProductsByPrompt(prompt) {
     });
 }
 
+app.get('/api/admin/getOrders/', async (req, res) => {
+    try {
+        const response = await fetchTasksGroupedByPhoneNumber();
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function fetchTasksGroupedByPhoneNumber() {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('SELECT t.*, p.* FROM tasks t JOIN products p ON t.product_id = p.id ORDER BY t.phone_number', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                // Group tasks by phone number
+
+                const tasksGroupedByPhoneNumber = results.reduce((groups, task) => {
+                    const key = task.phone_number
+                    let index = groups.findIndex( user => user.phone_number === key);
+                    if (index === -1) {
+                        groups.push({
+                            id: task.id,
+                            phone_number: task.phone_number,
+                            user_name: task.name,
+                            date: task.order_date,
+                            products: []
+                        })
+                        index = groups.length - 1
+                    }
+                    groups[index].products.push({
+                        count: task.count,
+                        product_name: task.title,
+                        product_price: task.price
+                    });
+                    return groups;
+                }, []);
+
+                resolve(tasksGroupedByPhoneNumber);
+            }
+        });
+    });
+}
+
 const start = () => {
     try {
         server.listen(port, () => console.log(`Server started on port ${port}`));

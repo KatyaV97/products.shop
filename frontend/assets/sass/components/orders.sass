@@ -1,0 +1,60 @@
+.order-table-header
+    display: flex
+    justify-content: space-between
+    margin-bottom: 20px
+    padding: 0 0 10px
+    margin-top: 40px
+    border-bottom: 1px solid #FFD600
+
+    .header-item
+      @include default-mega-button-text
+      font-weight: 600
+      width: 25%
+
+.order-card-container
+  display: flex
+  justify-content: space-between
+  margin-bottom: 20px
+
+  .index,
+  .price,
+  .title,
+  .basket-btn
+    width: 20%
+    @include default-mega-button-text
+    font-weight: 400
+
+  .basket-btn
+    display: flex
+    justify-content: flex-end
+    align-items: flex-end
+
+.table-body
+  @include direction-column
+
+  .list-title
+    @include default-mega-button-text
+    font-weight: 600
+    margin-bottom: 20px
+
+  .order-products
+    display: flex
+    justify-content: space-between
+    padding: 20px
+    border: 1px solid #FFD600
+
+    .product-item
+      width: 50%
+      font-weight: 400
+      color: #FFFFFF
+
+    .product-item
+      &.count
+        @include align-items-center
+        justify-content: center
+
+    .product-item._basket-btn
+      display: flex
+      justify-content: flex-end
+      align-items: flex-end
+

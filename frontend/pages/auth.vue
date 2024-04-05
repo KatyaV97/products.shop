@@ -200,6 +200,19 @@ export default {
         this.authUserStore.setAccessToken(this.data.accessToken)
         this.authUserStore.setRefreshToken(this.data.refreshToken)
 
+        await this.verifyUser(this.data)
+      }
+    },
+    async verifyUser(data) {
+      console.log(data.owner)
+      if (data.owner) {
+        await navigateTo('/admin', {
+          params: {
+            own: true
+          },
+          external: true
+        })
+      } else {
         await this.productsStore.saveAllProductsFromBasket()
         await this.productsStore.saveAllProductsFromFavorites()
         await this.productsStore.initFromDB()
@@ -207,6 +220,7 @@ export default {
           external: true
         })
       }
+
     },
     async registration() {
       this.disabledSubmitButton = true
