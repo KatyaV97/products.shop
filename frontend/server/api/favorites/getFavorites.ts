@@ -1,10 +1,10 @@
 import {FAVORITES} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
-import useCustomFetch from "~/server/api/helpers/customFetcher";
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
  * Method: GET
- * Получение товаров из корзины
+ * Получение товаров из избранного
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
@@ -19,10 +19,14 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
             }
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

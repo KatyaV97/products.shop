@@ -107,19 +107,23 @@
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import type {SortTab} from "~/types/tabs"
+import type {Range} from "~/types/common"
+import type {ErrorAlert, Tooltip} from "~/types/triggers"
+import type {Categories, Product} from "~/types/products"
 
 export default {
   data() {
     return {
       pageTitle: 'Night store' as string,
-      isLoading: true,
+      isLoading: true as boolean,
       priceRange: {
         min: 0,
         max: 12000
-      },
+      } as Range,
       tooltip: {
         show: false
-      },
+      } as Tooltip,
       sortTabs: [
         {
           type: 1,
@@ -132,17 +136,17 @@ export default {
           type: 3,
           title: 'По полуярности'
         }
-      ],
+      ] as SortTab[],
       activeSortTab: {
         type: 1,
         title: 'Цены: по возрастанию'
-      },
-      filteredProducts: [],
+      } as SortTab,
+      filteredProducts: [] as Product[],
       errorAlert: {
         show: false,
         text: '',
         url: ''
-      }
+      } as ErrorAlert
     }
   },
   async setup() {
@@ -165,13 +169,13 @@ export default {
     }
   },
   computed: {
-    selectedCategory() {
+    selectedCategory(): number {
       return this.productsStore.selectedCategory
     }
   },
   mounted() {
     if (!this.errorHandler(this.categories) && this.categories && this.categories.length > 0) {
-      this.categories.forEach(category => {
+      this.categories.forEach((category: Categories) => {
         category.isActive = category.id === this.selectedCategory
       })
     }
@@ -195,44 +199,44 @@ export default {
       this.errorAlert.text = text
       this.errorAlert.url = url
     },
-    setMinMax(range) {
+    setMinMax(range): void {
       this.priceRange.min = range.leftValue
       this.priceRange.max = range.rightValue
     },
-    filterProductsByPrice() {
-      this.filteredProducts = this.products.filter(product => {
+    filterProductsByPrice(): void {
+      this.filteredProducts = this.products.filter((product: Product): boolean => {
         return product.price >= this.priceRange.min && product.price <= this.priceRange.max
       })
       this.sortProducts()
     },
-    filterProductsByLength(count) {
+    filterProductsByLength(count: number): void {
       if (this.products && this.products.length > count) {
         this.filteredProducts = this.products.slice(0, count)
       } else {
         this.filteredProducts = this.products
       }
     },
-    changeSortTab(tab: object): void {
+    changeSortTab(tab: SortTab): void {
       this.activeSortTab = tab
       this.tooltip.show = false
       this.sortProducts()
     },
-    sortProducts() {
+    sortProducts(): void {
       if (this.activeSortTab.type === 1) {
-        this.filteredProducts = this.filteredProducts.sort((a, b) => a.price - b.price)
+        this.filteredProducts = this.filteredProducts.sort((a: Product, b: Product) => a.price - b.price)
       } else if (this.activeSortTab.type === 2) {
-        this.filteredProducts = this.filteredProducts.sort((a, b) => b.price - a.price)
+        this.filteredProducts = this.filteredProducts.sort((a: Product, b: Product) => b.price - a.price)
       } else if (this.activeSortTab.type === 3) {
-        this.filteredProducts = this.filteredProducts.sort((a, b) => a.popularity - b.popularity)
+        this.filteredProducts = this.filteredProducts.sort((a: Product, b: Product) => a.popularity - b.popularity)
       }
     },
-    setActiveCategory(category) {
-      this.categories.forEach(currentCategory => {
+    setActiveCategory(category: Categories): void {
+      this.categories.forEach((currentCategory: Categories): void => {
         currentCategory.isActive = currentCategory.id === category.id
       })
       this.getProducts(category.id)
     },
-    async getProducts(categoryId) {
+    async getProducts(categoryId: number): Promise<void> {
       this.isLoading = true
       const {data: responseProducts} = await useFetch('/api/catalog/getProducts',
           {

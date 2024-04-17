@@ -1,5 +1,6 @@
 import {AUTH} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
  * Method: POST
@@ -10,7 +11,6 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
     let myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Accept', 'application/json');
-    console.log(11)
     try {
         return await $fetch(`${AUTH}/login`,
             {
@@ -23,10 +23,14 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
             }
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

@@ -8,18 +8,22 @@
           :classes="['main', 'auto']"
           @click="$emit('moveToCatalog', cardInfo)"
       >
-        <p class="_non-space card-info-btn">{{ cardInfo.title }}</p>
+        <p class="_non-space card-info-btn">
+          {{ cardInfo.title }}
+        </p>
       </MainButton>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import type {Product} from "~/types/products"
+
 export default {
   emits: ['moveToCatalog'],
   props: {
     cardInfo: {
-      type: Object,
+      type: Object as () => Product,
       required: true
     }
   }
@@ -28,5 +32,4 @@ export default {
 
 
 <style scoped>
-
 </style>

@@ -28,7 +28,9 @@
               :disabled="loadingSearch"
               @click="initSearchProducts"
           >
-            <p class="_non-space">Найти</p>
+            <p class="_non-space">
+              Найти
+            </p>
           </MainButton>
           <div
               class="search-result"
@@ -50,8 +52,12 @@
                       class="custom-link"
                   >
                     <div class="search-result-item">
-                      <p class="_non-space">{{ product.title }}</p>
-                      <p class="_non-space">{{ product.price }}</p>
+                      <p class="_non-space">
+                        {{ product.title }}
+                      </p>
+                      <p class="_non-space">
+                        {{ product.price }}
+                      </p>
                     </div>
                   </NuxtLink>
                 </template>
@@ -63,7 +69,9 @@
               v-else-if="openResult && productsSearch && productsSearch.length === 0"
           >
             <div class="search-result-item empty">
-              <p class="_non-space">Ничего не найдено</p>
+              <p class="_non-space">
+                Ничего не найдено
+              </p>
             </div>
           </div>
         </div>
@@ -73,7 +81,9 @@
             to="/products"
             class="custom-link button-link"
         >
-          <p class="_non-space">Магазин</p>
+          <p class="_non-space">
+            Магазин
+          </p>
         </NuxtLink>
         <div class="right-side">
           <NuxtLink
@@ -81,10 +91,11 @@
               class="custom-link"
           >
             <div class="ico-btn">
-              <svg width="33" height="33"
-                   viewBox="0 0 33 33"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg"
+              <svg
+                  width="33" height="33"
+                  viewBox="0 0 33 33"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                     d="M23.4534 0C21.9447 0.0251775 20.4689 0.477035 19.175 1.30994C17.8812 2.14285 16.8151 3.32731 16.0844 4.74371C15.3537 3.32731 14.2876 2.14285 12.9937 1.30994C11.6999 0.477035 10.2241 0.0251775 8.71534 0C6.31028 0.112111 4.04432 1.24092 2.41252 3.13981C0.780716 5.0387 -0.0842876 7.55331 0.00648623 10.1343C0.00648623 19.8733 14.6856 31.1216 15.31 31.5989L16.0844 32.1868L16.8588 31.5989C17.4832 31.1245 32.1623 19.8733 32.1623 10.1343C32.253 7.55331 31.388 5.0387 29.7562 3.13981C28.1244 1.24092 25.8585 0.112111 23.4534 0ZM16.0844 28.6477C11.7259 25.1546 2.68613 16.5728 2.68613 10.1343C2.59454 8.31546 3.177 6.53156 4.30647 5.17165C5.43594 3.81174 7.02078 2.98617 8.71534 2.87498C10.4099 2.98617 11.9947 3.81174 13.1242 5.17165C14.2537 6.53156 14.8361 8.31546 14.7445 10.1343H17.4242C17.3326 8.31546 17.9151 6.53156 19.0445 5.17165C20.174 3.81174 21.7588 2.98617 23.4534 2.87498C25.148 2.98617 26.7328 3.81174 27.8623 5.17165C28.9917 6.53156 29.5742 8.31546 29.4826 10.1343C29.4826 16.5757 20.4428 25.1546 16.0844 28.6477Z"
@@ -97,11 +108,12 @@
               class="custom-link"
           >
             <div class="ico-btn">
-              <svg width="30"
-                   height="30"
-                   viewBox="0 0 30 30"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg"
+              <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
               >
                 <g clip-path="url(#clip0_439_357)">
                   <path
@@ -124,7 +136,9 @@
                   class="count-basket-products"
                   v-if="productsBasketCount > 0"
               >
-                <p class="_non-space count">{{ productsBasketCount }}</p>
+                <p class="_non-space count">
+                  {{ productsBasketCount }}
+                </p>
               </div>
             </div>
           </NuxtLink>
@@ -133,11 +147,12 @@
               class="custom-link"
           >
             <div class="ico-btn">
-              <svg width="23"
-                   height="33"
-                   viewBox="0 0 23 33"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg"
+              <svg
+                  width="23"
+                  height="33"
+                  viewBox="0 0 23 33"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                     d="M11.25 16.0934C12.7334 16.0934 14.1834 15.6215 15.4168 14.7373C16.6501 13.8531 17.6114 12.5964 18.1791 11.126C18.7468 9.6557 18.8953 8.03778 18.6059 6.47687C18.3165 4.91596 17.6022 3.48218 16.5533 2.35683C15.5044 1.23148 14.168 0.465102 12.7132 0.154619C11.2583 -0.155865 9.75032 0.00348652 8.37988 0.612522C7.00943 1.22156 5.83809 2.25292 5.01398 3.5762C4.18987 4.89947 3.75 6.45522 3.75 8.0467C3.75199 10.1802 4.5428 12.2256 5.94889 13.7342C7.35499 15.2428 9.26149 16.0913 11.25 16.0934ZM11.25 2.68224C12.2389 2.68224 13.2056 2.99686 14.0279 3.58631C14.8501 4.17577 15.491 5.01358 15.8694 5.99381C16.2478 6.97404 16.3469 8.05265 16.1539 9.09326C15.961 10.1339 15.4848 11.0897 14.7855 11.84C14.0863 12.5902 13.1954 13.1011 12.2255 13.3081C11.2555 13.5151 10.2502 13.4088 9.33658 13.0028C8.42295 12.5968 7.64206 11.9092 7.09265 11.027C6.54325 10.1449 6.25 9.10769 6.25 8.0467C6.25 6.62396 6.77678 5.25948 7.71447 4.25345C8.65215 3.24742 9.92392 2.68224 11.25 2.68224Z"
@@ -204,7 +219,7 @@ export default {
     this.checkAuth()
   },
   methods: {
-    checkAuth() {
+    checkAuth(): void {
       if (this.userId !== null && this.userId !== undefined &&
           this.userId !== '') {
         this.hasLogin = true
@@ -212,12 +227,12 @@ export default {
       }
       this.hasLogin = false
     },
-    openSearchResult() {
+    openSearchResult(): void {
       if (this.productsSearch && this.productsSearch.length > 0) {
         this.openResult = true
       }
     },
-    async initSearchProducts() {
+    async initSearchProducts(): Promise<void> {
       this.openResult = false
 
       if (this.searchInput.searchValue.trim() === '') {
@@ -234,10 +249,10 @@ export default {
       this.loadingSearch = false
       this.openResult = true
     },
-    setValue(value) {
+    setValue(value: string): void {
       this.searchInput.searchValue = value
     },
-    closeSearchBlock() {
+    closeSearchBlock(): void {
       this.openResult = false
       this.loadingSearch = false
       this.removeStoped()

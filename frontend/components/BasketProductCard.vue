@@ -6,24 +6,29 @@
         :src="cardInfo.urlImg"
         alt="Картинка товара"
     />
-    <p class="_non-space title">{{ cardInfo.title }}</p>
+    <p class="_non-space title">
+      {{ cardInfo.title }}
+    </p>
     <Toggle
         :count-product="cardInfo?.count.toString() ? cardInfo.count.toString() : '0'"
         :min="0"
         @increase="increase"
         @decrease="decrease"
     />
-    <p class="_non-space price">{{ new Intl.NumberFormat('ru-RU').format(cardInfo.price) }} руб.</p>
+    <p class="_non-space price">
+      {{ new Intl.NumberFormat('ru-RU').format(cardInfo.price) }} руб.
+    </p>
   </div>
 </template>
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import type {Product} from "~/types/products"
 
 export default {
   props: {
     cardInfo: {
-      type: Object,
+      type: Object as () => Product,
       required: true
     }
   },
@@ -34,13 +39,13 @@ export default {
     }
   },
   methods: {
-    decrease(count): void {
+    decrease(count: number): void {
       this.$emit('decrease', {cardInfo: this.cardInfo, count: count})
     },
-    increase(count): void {
+    increase(count: number): void {
       this.$emit('increase', {cardInfo: this.cardInfo, count: count})
     },
-    moveToProductPage(product: any) {
+    moveToProductPage(product: Product) {
       this.$router.push(`/products/${product.id}`)
     }
   }
@@ -48,5 +53,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

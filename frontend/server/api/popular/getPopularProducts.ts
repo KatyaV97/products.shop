@@ -1,5 +1,6 @@
 import {POPULAR} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
  * Method: GET
@@ -15,10 +16,14 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
             }
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

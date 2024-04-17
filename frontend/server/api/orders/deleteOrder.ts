@@ -1,23 +1,19 @@
-import {BASKET} from "~/server/api/constants/urls"
+import {ORDERS} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
 import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
- * Method: POST
- * Добавление в корзину товара
+ * Method: DELETE
+ * Удаление заявки из списка
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
-    const cookie = parseCookies(event)
+
     try {
-        return await $fetch(`${BASKET}/addProduct`, {
-                headers: {
-                    'Authorization': `Bearer ${cookie.access}`
-                },
-                method: 'POST',
+        return await $fetch(`${ORDERS}/deleteOrder`, {
+                method: 'DELETE',
                 body: {
-                    product_id: params.product_id,
-                    count: params.count,
+                    phone_number: params.phone_number,
                 }
             }
         )

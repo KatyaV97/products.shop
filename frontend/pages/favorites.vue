@@ -15,14 +15,20 @@
         <div class="favorites-block"
              v-if="productsInFavorite && productsInFavorite.length > 0"
         >
-          <p class="_non-space title">Ваш список избранного</p>
+          <p class="_non-space title">
+            Ваш список избранного
+          </p>
           <div class="table-header">
-            <p class="_non-space empty header-item"></p>
-            <p class="_non-space name header-item">Наименование</p>
-            <p class="_non-space price header-item">Цена</p>
-            <p class="_non-space empty-2 header-item"></p>
+            <p class="_non-space empty header-item"/>
+            <p class="_non-space name header-item">
+              Наименование
+            </p>
+            <p class="_non-space price header-item">
+              Цена
+            </p>
+            <p class="_non-space empty-2 header-item"/>
           </div>
-          <div class="line"></div>
+          <div class="line"/>
           <div class="favorites-products">
             <template
                 v-for="product in productsInFavorite"
@@ -31,16 +37,21 @@
               <FavoriteProductCard
                   :card-info="product"
               />
-              <div class="line"></div>
+              <div class="line"/>
             </template>
           </div>
         </div>
-        <div class="basket-block"
-             v-else
+        <div
+            class="basket-block"
+            v-else
         >
-          <p class="_non-space title">Ваш список избранного пуст</p>
+          <p class="_non-space title">
+            Ваш список избранного пуст
+          </p>
           <div class="empty-block">
-            <p class="_non-space empty">Пусто!</p>
+            <p class="_non-space empty">
+              Пусто!
+            </p>
             <NuxtLink
                 to="/products"
                 class="custom-link button-link"
@@ -73,17 +84,15 @@ export default {
     }
   },
   computed: {
-    productsInFavorite() {
+    productsInFavorite(): Product[] {
       return this.productsStore.getProductsInFavorite
     },
   },
   mounted() {
     this.productsStore.initFromStore()
-  },
-
+  }
 }
 </script>
-
 
 <style scoped>
 </style>

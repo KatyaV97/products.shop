@@ -21,14 +21,22 @@
         <div class="basket-block"
              v-if="productsInBasket && productsInBasket.length > 0"
         >
-          <p class="_non-space title">Ваша корзина покупок</p>
+          <p class="_non-space title">
+            Ваша корзина покупок
+          </p>
           <div class="table-header">
-            <p class="_non-space empty header-item"></p>
-            <p class="_non-space name header-item">Наименование</p>
-            <p class="_non-space count header-item">Количество</p>
-            <p class="_non-space price header-item">Цена</p>
+            <p class="_non-space empty header-item"/>
+            <p class="_non-space name header-item">
+              Наименование
+            </p>
+            <p class="_non-space count header-item">
+              Количество
+            </p>
+            <p class="_non-space price header-item">
+              Цена
+            </p>
           </div>
-          <div class="line"></div>
+          <div class="line"/>
           <div class="basket-products">
             <template
                 v-for="product in productsInBasket"
@@ -72,15 +80,18 @@
                   @input="setValue('phoneNumber', $event.target.value)"
               />
             </div>
-            <div class="info-block">Пожалуйста, внесите свои данные, чтобы мы могли связаться с вами и принять вашу
+            <div class="info-block">
+              Пожалуйста, внесите свои данные, чтобы мы могли связаться с вами и принять вашу
               заявку
             </div>
             <div class="result-block">
               <div class="result">
-                <p class="_non-space text-center">Итого:</p>
-                <p class="_non-space text-center result-text">{{
-                    new Intl.NumberFormat('ru-RU').format(resultPrice)
-                  }}</p>
+                <p class="_non-space text-center">
+                  Итого:
+                </p>
+                <p class="_non-space text-center result-text">
+                  {{ new Intl.NumberFormat('ru-RU').format(resultPrice) }}
+                </p>
               </div>
               <div class="result">
                 <p class="_non-space delivery">Доставка:</p>
@@ -99,9 +110,13 @@
         <div class="basket-block"
              v-else
         >
-          <p class="_non-space title">Ваша корзина пуста</p>
+          <p class="_non-space title">
+            Ваша корзина пуста
+          </p>
           <div class="empty-block">
-            <p class="_non-space empty">Пусто!</p>
+            <p class="_non-space empty">
+              Пусто!
+            </p>
             <NuxtLink
                 to="/products"
                 class="custom-link button-link"
@@ -120,6 +135,9 @@
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import type {Product} from "~/types/products"
+import type {Input} from "~/types/common"
+import type {Alert} from "~/types/triggers"
 
 export default {
   data() {
@@ -130,15 +148,17 @@ export default {
         phoneNumber: '',
         email: '',
         isValid: false
-      },
+      } as Input,
       alert: {
         text: '',
         visible: false,
         focus: false,
         stoped: false,
-      },
+      } as Alert,
       error: {
         visible: false
+      } as {
+        visible: boolean
       }
     }
   },
@@ -149,10 +169,10 @@ export default {
     }
   },
   computed: {
-    productsInBasket() {
+    productsInBasket(): Product[] {
       return this.productsStore.getProductsInBasket
     },
-    resultPrice() {
+    resultPrice(): number {
       return this.productsStore.getResultPrice
     }
   },
@@ -164,10 +184,8 @@ export default {
     getAlertFocusStatus(status: boolean): boolean {
       return this.alert.focus = status
     },
-    decrease(cardInfo): void {
-      console.log(cardInfo)
-      console.log(cardInfo.cardInfo.count === 1)
-      if (cardInfo.cardInfo.count  === 1) {
+    decrease(cardInfo: Product): void {
+      if (cardInfo.cardInfo.count === 1) {
         this.productsStore.deleteProductFromBasket(cardInfo.cardInfo)
         this.productsStore.deleteProductFromBasketInStore(cardInfo.cardInfo)
         return
@@ -175,7 +193,7 @@ export default {
       this.productsStore.addProductsInBasket(cardInfo.cardInfo, -1)
       this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: -1})
     },
-    increase(cardInfo): void {
+    increase(cardInfo: Product): void {
       this.productsStore.addProductsInBasket(cardInfo.cardInfo, 1)
       this.productsStore.saveProductFromBasket({...cardInfo.cardInfo, count: 1})
     },
@@ -195,13 +213,13 @@ export default {
       const phone = phoneNumber.replaceAll(' ', '')
       return phone.length === 12
     },
-    clearInput() {
+    clearInput(): void {
       this.userInput.phoneNumber = ''
       this.userInput.name = ''
       this.userInput.email = ''
       this.userInput.isValid = false
     },
-    async sendIssue() {
+    async sendIssue(): Promise<void> {
       this.userInput.isValid = false
       let products = {}
       this.productsInBasket.forEach(product => {
@@ -216,6 +234,7 @@ export default {
           name: this.userInput.name,
           phoneNumber: this.userInput.phoneNumber,
           email: this.userInput.email,
+          date: this.$moment().format('YYYY-MM-DD HH:mm:ss')
         }
       })
       if (!response.data.error) {

@@ -102,7 +102,7 @@ export default {
   },
   watch: {
     isError: {
-      handler(newVal, oldVal) {
+      handler(newVal) {
         if (newVal) {
           this.showAlert()
         }

@@ -20,6 +20,9 @@ export default defineNuxtConfig({
         {
             src: '@/plugins/maska.ts',
         },
+        {
+            src: '@/plugins/moment.ts'
+        },
     ],
     app: {
         head: {

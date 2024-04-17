@@ -1,11 +1,11 @@
 import {AUTH} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
-
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 /**
  * Method: POST
- * Получение ключа аутентификации по паролю
+ * Регистрация пользователя
  */
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event: H3Event) => {
     const params = getQuery(event)
 /*
     let myHeaders = new Headers();
@@ -23,10 +23,14 @@ export default defineEventHandler(async (event) => {
             }
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

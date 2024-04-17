@@ -43,7 +43,7 @@ function generateTokens(payload) {
  */
 app.post('/api/auth/login/', async (req, res) => {
     const params = req.body;
-    console.log(11)
+
     try {
         const response = await fetchFromDatabase(params);
         if (response) {
@@ -302,9 +302,9 @@ async function fetchProductById(productId) {
 }
 
 app.post('/api/basket/task', async (req, res) => {
-    const {products, name, phoneNumber, email} = req.body
+    const {products, name, phoneNumber, email, date} = req.body
     try {
-        const response = await createTask(JSON.parse(products), name, phoneNumber, email);
+        const response = await createTask(JSON.parse(products), name, phoneNumber, email, date);
         res.json(response);
     } catch (exception) {
         res.status(500).json({
@@ -315,11 +315,11 @@ app.post('/api/basket/task', async (req, res) => {
     }
 });
 
-async function createTask(products, name, phoneNumber, email) {
+async function createTask(products, name, phoneNumber, email, date) {
     const queries = Object.entries(products).map(([productId, count]) => {
         return new Promise((resolve, reject) => {
             // Query the database
-            connection.query('INSERT INTO tasks (product_id, count, name, phone_number, email) VALUES (?, ?, ?, ?, ?)', [productId, count, name, phoneNumber, email], (error, results) => {
+            connection.query('INSERT INTO orders (product_id, count, name, phone_number, email, order_date) VALUES (?, ?, ?, ?, ?, ?)', [productId, count, name, phoneNumber, email, date], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -412,8 +412,8 @@ async function addProductToBasket(userId, productId, count) {
 }
 
 app.delete('/api/basket/deleteProduct/', async (req, res) => {
-    const {product_id} = req.body;
-    console.log(product_id)
+    const {product_id} = req.body
+
     const authHeader = req.headers.authorization
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
@@ -512,8 +512,6 @@ app.post('/api/favorites/addFavorite/', async (req, res) => {
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
         // Now you can use the token
-        console.log(product_id)
-        console.log(authHeader)
 
         jwt.verify(token, accessTokenSecret, async (err, user) => {
             if (err) {
@@ -551,7 +549,7 @@ async function addFavoriteProductToDB(userId, productId) {
 
 app.delete('/api/favorites/deleteFavorite/', async (req, res) => {
     const {product_id} = req.body;
-    console.log(product_id)
+
     const authHeader = req.headers.authorization
     if (authHeader) {
         const token = authHeader.split(' ')[1]; // Bearer <token>
@@ -604,9 +602,9 @@ async function fetchProductsByPrompt(prompt) {
     });
 }
 
-app.get('/api/admin/getOrders/', async (req, res) => {
+app.get('/api/orders/getOrders/', async (req, res) => {
     try {
-        const response = await fetchTasksGroupedByPhoneNumber();
+        const response = await fetchOrdersGroupedByPhoneNumber();
         res.json(response);
     } catch (exception) {
         res.status(500).json({
@@ -617,10 +615,10 @@ app.get('/api/admin/getOrders/', async (req, res) => {
     }
 });
 
-async function fetchTasksGroupedByPhoneNumber() {
+async function fetchOrdersGroupedByPhoneNumber() {
     return new Promise((resolve, reject) => {
         // Query the database
-        connection.query('SELECT t.*, p.* FROM tasks t JOIN products p ON t.product_id = p.id ORDER BY t.phone_number', (error, results) => {
+        connection.query('SELECT t.*, p.* FROM orders t JOIN products p ON t.product_id = p.id ORDER BY t.phone_number', (error, results) => {
             if (error) {
                 reject(error);
             } else {
@@ -648,6 +646,34 @@ async function fetchTasksGroupedByPhoneNumber() {
                 }, []);
 
                 resolve(tasksGroupedByPhoneNumber);
+            }
+        });
+    });
+}
+
+app.delete('/api/orders/deleteOrder/', async (req, res) => {
+    const {phone_number} = req.body;
+
+    try {
+        const response = await deleteOrdersByPhoneNumber(phone_number);
+        res.json(response);
+    } catch (exception) {
+        res.status(500).json({
+            error: true,
+            code: exception.code,
+            message: exception.message
+        });
+    }
+});
+
+async function deleteOrdersByPhoneNumber(phoneNumber) {
+    return new Promise((resolve, reject) => {
+        // Query the database
+        connection.query('DELETE FROM orders WHERE phone_number = ?', [phoneNumber], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve({message: 'Orders removed successfully'});
             }
         });
     });

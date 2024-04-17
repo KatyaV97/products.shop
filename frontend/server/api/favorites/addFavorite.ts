@@ -1,6 +1,6 @@
 import {FAVORITES} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
-import useCustomFetch from "~/server/api/helpers/customFetcher";
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
  * Method: POST
@@ -9,7 +9,7 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const params = getQuery(event)
     const cookie = parseCookies(event)
-    console.log(params)
+
     try {
         return await $fetch(`${FAVORITES}/addFavorite`, {
                 headers: {
@@ -22,10 +22,14 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
             }
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

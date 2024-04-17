@@ -13,8 +13,14 @@
     <template v-slot:main-content>
       <div class="auth-container">
         <div class="auth-block">
-          <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg"
-               xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg
+              width="150"
+              height="150"
+              viewBox="0 0 150 150"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
             <rect width="150" height="150" fill="url(#pattern0)"/>
             <defs>
               <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -31,7 +37,8 @@
               <label
                   v-if="!userInput.isValid"
                   for="main-input"
-                  class="error">
+                  class="error"
+              >
                 Неверный логин или пароль
               </label>
               <input
@@ -54,7 +61,9 @@
             />
             <p class="_non-space register"
                @click="toRegistration"
-            >Зарегистрироваться, если нет аккаунта</p>
+            >
+              Зарегистрироваться, если нет аккаунта
+            </p>
             <MainButton
                 :classes="['main', 'for-auth']"
                 :disabled="disabledSubmitButton"
@@ -71,7 +80,8 @@
               <label
                   v-if="!userInput.isValid"
                   for="main-input"
-                  class="error">
+                  class="error"
+              >
                 Некорректный адрес электронной почты
               </label>
               <input
@@ -117,24 +127,25 @@
   </MainContainer>
 </template>
 
-<script lang="js">
-import {useAuthUserStore} from "~/store/authUserStore";
+<script lang="ts">
+import {useAuthUserStore} from "~/store/authUserStore"
 import {useProductsStore} from "~/store/productsStore"
+import type {Input} from "~/types/common"
 
 export default {
   data() {
     return {
-      pageTitle: 'Night store. Авторизация',
+      pageTitle: 'Night store. Авторизация' as string,
       userInput: {
         name: '',
         password: '',
         email: '',
         isValid: true
-      },
-      needRegistration: false,
+      } as Input,
+      needRegistration: false as boolean,
       data: {},
-      disabledSubmitButton: true,
-      step: 1
+      disabledSubmitButton: true as boolean,
+      step: 1 as number
     }
   },
   setup() {
@@ -146,7 +157,7 @@ export default {
     }
   },
   methods: {
-    toRegistration() {
+    toRegistration(): void {
       this.step = 2
       this.needRegistration = true
       this.userInput.name = ''
@@ -154,18 +165,18 @@ export default {
       this.userInput.email = ''
       this.disabledSubmitButton = true
     },
-    clearError() {
+    clearError(): void {
       this.userInput.isValid = true
     },
-    setValue(key, value) {
+    setValue(key, value): void {
       this.userInput[key] = value
       this.verifyInputs()
     },
-    isValidEmail(newMail) {
+    isValidEmail(newMail): boolean {
       const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
       return reg.test(newMail);
     },
-    verifyInputs() {
+    verifyInputs(): void {
       if (this.step === 1) {
         const isValid = this.userInput.email.replaceAll(' ', '') !== '' &&
             this.userInput.password.replaceAll(' ', '') !== '' &&
@@ -180,7 +191,7 @@ export default {
         this.disabledSubmitButton = !isValid
       }
     },
-    async logIn() {
+    async logIn(): Promise<void> {
       if (this.disabledSubmitButton) return
 
       this.disabledSubmitButton = true
@@ -203,8 +214,7 @@ export default {
         await this.verifyUser(this.data)
       }
     },
-    async verifyUser(data) {
-      console.log(data.owner)
+    async verifyUser(data): void {
       if (data.owner) {
         await navigateTo('/admin', {
           params: {
@@ -220,9 +230,8 @@ export default {
           external: true
         })
       }
-
     },
-    async registration() {
+    async registration(): void {
       this.disabledSubmitButton = true
       const response = await useFetch('/api/auth/createAccount', {
         query: {
@@ -247,12 +256,10 @@ export default {
           external: true
         })
       }
-
     }
   }
 }
 </script>
-
 
 <style scoped>
 </style>

@@ -10,17 +10,21 @@
         :key="tab.type"
         @click.stop.prevent="$emit('changeSort', tab)"
     >
-      <p class="_non-space">{{ tab.title }}</p>
+      <p class="_non-space">
+        {{ tab.title }}
+      </p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import type {SortTab} from "~/types/tabs"
+
 export default {
   emits: ['changeSort'],
   props: {
     sortInfo: {
-      type: Array,
+      type: Array as () => SortTab[],
       required: true
     },
     show: {

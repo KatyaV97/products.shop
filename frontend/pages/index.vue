@@ -19,9 +19,11 @@
     <template v-slot:main-content>
       <div class="main-page">
         <div class="popular-categories">
-          <div class="header-text"><p class="_non-space">
-            Популярные категории
-          </p></div>
+          <div class="header-text">
+            <p class="_non-space">
+              Популярные категории
+            </p>
+          </div>
           <div
               class=card-container
               v-if="popularCategories && popularCategories.length > 0"
@@ -38,14 +40,18 @@
           </div>
         </div>
         <div class="popular-products">
-          <div class="header-text"><p class="_non-space">
-            Популярные товары
-          </p></div>
+          <div class="header-text">
+            <p class="_non-space">
+              Популярные товары
+            </p>
+          </div>
           <div
               class=card-container
               v-if="popularProducts && popularProducts.length > 0"
           >
-            <p class="_non-space popular-text">Популярное</p>
+            <p class="_non-space popular-text">
+              Популярное
+            </p>
             <template
                 v-for="card in popularProducts"
                 :key="card.title"
@@ -65,8 +71,10 @@
 </template>
 
 <script lang="ts">
-import PopularProducts from "~/components/PopularProducts.vue";
+import PopularProducts from "~/components/PopularProducts.vue"
 import {useProductsStore} from "~/store/productsStore"
+import type {ErrorAlert} from "~/types/triggers"
+import type {Product} from "~/types/products"
 
 export default {
   components: {PopularProducts},
@@ -77,7 +85,7 @@ export default {
         show: false,
         text: '',
         url: ''
-      }
+      } as ErrorAlert
     }
   },
   async setup() {
@@ -97,7 +105,6 @@ export default {
   },
   methods: {
     errorHandler(response: object): boolean {
-      console.log(response)
       if (!response || response?.error && response.error) {
         this.toggleErrorAlert(true, 'Что-то пошло не так, попробуйте позже', response?.url ? response?.url : '')
         return true
@@ -109,7 +116,7 @@ export default {
       this.errorAlert.text = text
       this.errorAlert.url = url
     },
-    moveToCatalog(card) {
+    moveToCatalog(card: Product): void {
       this.productsStore.setActiveCategory(card.category_id)
       this.$router.push('/products')
     }

@@ -20,22 +20,31 @@
     </template>
     <template v-slot:main-content>
       <div class="selected-product-container">
-        <div class="selected-product-block"
-             v-if="product"
+        <div
+            class="selected-product-block"
+            v-if="product"
         >
-          <div class="left-side"
-               v-if="product && product?.urlImg"
+          <div
+              class="left-side"
+              v-if="product && product?.urlImg"
           >
             <img :src="product.urlImg" alt="Картинка товара"/>
           </div>
           <div class="right-side">
-            <div class="top"
-                 v-if="product && product?.title && product?.description"
+            <div
+                class="top"
+                v-if="product && product?.title && product?.description"
             >
-              <p class="_non-space title">{{ product.title }}</p>
+              <p class="_non-space title">
+                {{ product.title }}
+              </p>
               <div class="description">
-                <p class="_non-space title">Описание:</p>
-                <p class="_non-space description">{{ product.description }}</p>
+                <p class="_non-space title">
+                  Описание:
+                </p>
+                <p class="_non-space description">
+                  {{ product.description }}
+                </p>
               </div>
             </div>
             <div class="bottom">
@@ -89,18 +98,22 @@
               </div>
               <p class="_non-space price"
                  v-if="product && product?.price"
-              >Цена: {{ new Intl.NumberFormat('ru-RU').format(count * product.price) }}
+              >
+                Цена: {{ new Intl.NumberFormat('ru-RU').format(count * product.price) }}
                 <span class="_non-space rouble">№</span>
               </p>
             </div>
           </div>
         </div>
-        <div class="line"></div>
+        <div class="line"/>
         <div class="popular-products">
-          <div class=card-container
-               v-if="popularProducts && popularProducts.length> 0"
+          <div
+              class=card-container
+              v-if="popularProducts && popularProducts.length> 0"
           >
-            <p class="_non-space popular-text">Рекомендуем:</p>
+            <p class="_non-space popular-text">
+              Рекомендуем:
+            </p>
             <template
                 v-for="card in popularProducts"
                 :key="card.title"
@@ -121,18 +134,20 @@
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import type {ErrorAlert} from "~/types/triggers"
+import type {Product} from "~/types/products";
 
 export default {
   data() {
     return {
-      pageTitle: 'Night store',
-      count: 1,
+      pageTitle: 'Night store' as string,
+      count: 1 as number,
       priceResult: 0,
       errorAlert: {
         show: false,
         text: '',
         url: ''
-      }
+      } as ErrorAlert
     }
   },
   async setup() {
@@ -157,10 +172,10 @@ export default {
     }
   },
   computed: {
-    productsInBasket() {
+    productsInBasket(): Product[] {
       return this.productsStore.getProductsInBasket
     },
-    productsInFavorite() {
+    productsInFavorite(): Product[] {
       return this.productsStore.getProductsInFavorite
     }
   },
@@ -188,9 +203,9 @@ export default {
       this.productsStore.addProductsInBasket(this.product, this.count)
       this.productsStore.saveProductFromBasket({...this.product, count: this.count})
     },
-    checkProductInFavorite() {
+    checkProductInFavorite(): void {
       if (this.productsInFavorite && this.productsInFavorite.length > 0) {
-        const index = this.productsInFavorite.findIndex(item => {
+        const index = this.productsInFavorite.findIndex((item: Product): boolean => {
           return item.id === this.product.id
         })
         if (index !== -1) {
@@ -200,9 +215,9 @@ export default {
         this.product.isFavorite = false
       }
     },
-    checkProductInBasket() {
+    checkProductInBasket(): void {
       if (this.productsInBasket && this.productsInBasket.length > 0) {
-        const index = this.productsInBasket.findIndex(item => {
+        const index = this.productsInBasket.findIndex((item: Product): boolean => {
           return item.id === this.product.id
         })
         if (index !== -1) {
@@ -212,7 +227,7 @@ export default {
         this.count = 1
       }
     },
-    toggleHeart() {
+    toggleHeart(): void {
       this.product.isFavorite = !this.product.isFavorite
 
       if (this.product.isFavorite) {
@@ -223,12 +238,12 @@ export default {
       this.productsStore.deleteProductFromFavorite(this.product)
       this.productsStore.deleteProductFromFavoriteInStore(this.product)
     },
-    decrease() {
+    decrease(): void {
       const result = this.count - 1
       if (result === 0) return
       this.count -= 1
     },
-    increase() {
+    increase(): void {
       const result = this.count + 1
       if (result === 101) return
       this.count += 1

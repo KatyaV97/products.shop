@@ -1,6 +1,6 @@
 <template>
   <div class="order-table-header">
-    <p class="_non-space header-item">№</p>
+    <p class="_non-space header-item index">№</p>
     <p class="_non-space name header-item">Имя</p>
     <p class="_non-space price header-item">Телефон</p>
     <p class="_non-space price header-item">Дата</p>
@@ -14,7 +14,7 @@
         {{ orderInfo.phone_number }}
       </p>
       <p class="_non-space price header-item">
-        {{ orderInfo.date }}
+        {{ formatDate(orderInfo.date) }}
       </p>
       <div class="basket-btn">
         <MainButton
@@ -37,6 +37,15 @@
       <p class="_non-space product-item count">
         {{ product.count }} шт.
       </p>
+      <p class="_non-space product-item price">
+        {{ product.product_price }} <span class="rouble">№</span>
+      </p>
+    </div>
+    <div class="result">
+      <h3 class="_non-space price-result">Итого:</h3>
+      <p class="_non-space product-item price">
+        {{ new Intl.NumberFormat('ru-RU').format(getResultPrice()) }} <span class="rouble">№</span>
+      </p>
     </div>
   </div>
 </template>
@@ -45,6 +54,7 @@
 import {useProductsStore} from "~/store/productsStore"
 
 export default {
+  emits: ['deleteOrder'],
   props: {
     orderInfo: {
       type: Object,
@@ -63,8 +73,17 @@ export default {
   },
   methods: {
     deleteTask() {
-
+      const response = this.productsStore.deleteOrder(this.orderInfo.phone_number)
+      this.$emit('deleteOrder', {response: response, phone_number: this.orderInfo.phone_number})
     },
+    formatDate(date: string) {
+      return this.$moment(date).format('DD.MM.YYYY')
+    },
+    getResultPrice() {
+      return this.orderInfo.products.reduce((acc, product) => {
+        return acc + product.product_price * product.count
+      }, 0)
+    }
   }
 }
 </script>

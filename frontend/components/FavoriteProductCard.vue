@@ -22,11 +22,12 @@
 
 <script lang="ts">
 import {useProductsStore} from "~/store/productsStore"
+import type {Product} from "~/types/products"
 
 export default {
   props: {
     cardInfo: {
-      type: Object,
+      type: Object as () => Product,
       required: true
     }
   },
@@ -37,15 +38,15 @@ export default {
     }
   },
   methods: {
-    addToBasket(product: any) {
+    addToBasket(product: Product) {
       this.productsStore.addProductsInBasket(product, 1)
       this.deleteFromFavorite(product)
     },
-    deleteFromFavorite(product: any) {
+    deleteFromFavorite(product: Product) {
       this.productsStore.deleteProductFromFavorite(product)
       this.productsStore.deleteProductFromFavoriteInStore(product)
     },
-    moveToProductPage(product: any) {
+    moveToProductPage(product: Product) {
       this.$router.push(`/products/${product.id}`)
     }
   }

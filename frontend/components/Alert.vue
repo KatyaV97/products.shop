@@ -26,7 +26,9 @@
               fill="#45B80B"/>
       </svg>
     </div>
-    <p class="_non-space">{{ value }}</p>
+    <p class="_non-space">
+      {{ value }}
+    </p>
   </div>
 </template>
 

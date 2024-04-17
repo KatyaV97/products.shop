@@ -5,19 +5,28 @@
   >
     <div class="product-card-container">
       <div class="top">
-        <img :src="cardInfo.urlImg" alt="Картинка товара"/>
-        <p class="_non-space title">{{ cardInfo.title }}</p>
+        <img
+            :src="cardInfo.urlImg"
+            alt="Картинка товара"
+        />
+        <p class="_non-space title">
+          {{ cardInfo.title }}
+        </p>
       </div>
-      <p class="_non-space price">{{ cardInfo.price }} <span class="rouble">№</span></p>
+      <p class="_non-space price">
+        {{ cardInfo.price }} <span class="rouble">№</span>
+      </p>
     </div>
   </NuxtLink>
 </template>
 
 <script lang="ts">
+import type {Product} from "~/types/products"
+
 export default {
   props: {
     cardInfo: {
-      type: Object,
+      type: Object as () => Product,
       required: true
     }
   }
@@ -25,5 +34,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -3,7 +3,8 @@
     <div
         class="toggle"
         @click="decrease"
-    >-
+    >
+      -
     </div>
     <div class="left">
       <input
@@ -18,7 +19,8 @@
     <div
         class="toggle"
         @click="increase"
-    >+
+    >
+      +
     </div>
   </div>
 </template>

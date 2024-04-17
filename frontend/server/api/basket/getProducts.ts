@@ -1,6 +1,6 @@
 import {BASKET} from "~/server/api/constants/urls"
 import {H3Event} from "h3"
-import useCustomFetch from "~/server/api/helpers/customFetcher";
+import type {ErrorBody} from "~/server/api/helpers/errorHelpers"
 
 /**
  * Method: GET
@@ -8,7 +8,6 @@ import useCustomFetch from "~/server/api/helpers/customFetcher";
  */
 export default defineEventHandler(async (event: H3Event<Request>) => {
     const cookie =  parseCookies(event)
-    console.log(cookie.access)
     try {
         return await $fetch(`${BASKET}/getProducts/`,
             {
@@ -19,10 +18,14 @@ export default defineEventHandler(async (event: H3Event<Request>) => {
             },
         )
     } catch (exception) {
-        return {
-            error: true,
-            code: exception.data.code,
-            message: exception.data.message
+        if (typeof exception === 'object' &&
+            exception !== null &&
+            exception?.data) {
+            return {
+                error: true,
+                code: exception.data.code,
+                message: exception.data.message
+            } as ErrorBody
         }
     }
 })

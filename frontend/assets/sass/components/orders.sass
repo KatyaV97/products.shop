@@ -9,22 +9,31 @@
     .header-item
       @include default-mega-button-text
       font-weight: 600
-      width: 25%
+      width: 20%
+
+    .empty-2
+      width: 10%
+
+    .index
+      width: 5%
 
 .order-card-container
   display: flex
   justify-content: space-between
+  align-items: center
   margin-bottom: 20px
 
-  .index,
+  .index
+    width: 5%
+
   .price,
-  .title,
-  .basket-btn
+  .title
     width: 20%
     @include default-mega-button-text
     font-weight: 400
 
   .basket-btn
+    width: 10%
     display: flex
     justify-content: flex-end
     align-items: flex-end
@@ -44,17 +53,96 @@
     border: 1px solid #FFD600
 
     .product-item
-      width: 50%
+      width: 60%
       font-weight: 400
       color: #FFFFFF
 
+    .index
+      width: 5%
+
     .product-item
-      &.count
+      &.count,
+      &.price
         @include align-items-center
         justify-content: center
+        width: 20%
 
     .product-item._basket-btn
       display: flex
       justify-content: flex-end
       align-items: flex-end
 
+  .result
+    display: flex
+    justify-content: flex-end
+    padding: 20px
+    gap: 60px
+    align-items: center
+
+    .price-result
+      @include default-mega-button-text
+      font-weight: 600
+
+    .result-item
+      width: 60%
+      font-weight: 600
+      color: #FFFFFF
+
+    .result-item
+      &.count,
+      &.price
+        @include align-items-center
+        justify-content: center
+        width: 20%
+
+
+@media only screen and (max-width: 901.98px)
+
+  .order-table-header
+    gap: 10px
+
+    .header-item
+      width: auto
+
+    .empty-2
+      width: auto
+
+    .index
+      width: auto
+
+    .empty-2
+      width: 80px
+
+  .order-card-container
+    gap: 10px
+
+    .index
+      width: auto
+
+    .price,
+    .title
+      width: auto
+
+    .basket-btn
+      width: auto
+
+@media only screen and (max-width: 575.98px)
+
+  .order-table-header
+    display: none
+
+  .order-card-container
+    flex-direction: column
+    align-items: flex-start
+    border-top: 1px solid #FFD600
+    padding-top: 20px
+
+    .index
+      display: none
+
+  .table-body
+    .result
+      gap: 20px
+
+  .order-products
+    gap: 10px

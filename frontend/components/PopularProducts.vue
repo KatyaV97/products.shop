@@ -18,15 +18,17 @@
 </template>
 
 <script lang="ts">
+import type {Product} from "~/types/products"
+
 export default {
   props: {
     cardInfo: {
-      type: Object,
+      type: Object as () => Product,
       required: true
     }
   },
-  methods:{
-    moveToProduct(){
+  methods: {
+    moveToProduct(): void {
       this.$router.push(`/products/${this.cardInfo.product_id}`)
     }
   }
@@ -34,5 +36,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
